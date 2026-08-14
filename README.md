@@ -1,2 +1,2 @@
 Projeto xadrez em javascript
-inspirado po: @GersonFeT
+inspirado por: @GersonFeT
