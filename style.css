@@ -1,0 +1,63 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+#tabuleiro{
+
+    background-color: rgb(0, 0, 0);
+    display: grid;
+    grid-template-columns: repeat(8,80px);
+    grid-template-rows: repeat(8, 80px);
+    border: 5px solid rgb(61, 61, 61);
+}
+.CasaBranca{
+  background-color:rgb(199, 138, 59);
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.CasaPreta {
+    background-color:rgb(92, 62, 5);
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+.peca {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.peca.peao.branco.default {background-image: url(Imagens/Peao_branco_default.png);}
+.peca.torre.branco.default { background-image: url(Imagens/Torre_branco_default.png);}
+.peca.cavalo.branco.default { background-image: url(Imagens/Cavalo_branco_default.png);}
+.peca.bispo.branco.default { background-image: url(Imagens/Bispo_branco_default.png);}
+.peca.dama.branco.default { background-image: url(Imagens/Dama_branco_default.png);}
+.peca.rei.branco.default { background-image: url(Imagens/Rei_branco_default.png);}
+
+.peca.peao.preto.default { background-image: url(Imagens/Peao_preto_default.png);}
+.peca.torre.preto.default { background-image: url(Imagens/Torre_preto_default.png);}
+.peca.cavalo.preto.default { background-image: url(Imagens/Cavalo_preto_default.png);}
+.peca.bispo.preto.default { background-image: url(Imagens/Bispo_preto_default.png);}
+.peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
+.peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
