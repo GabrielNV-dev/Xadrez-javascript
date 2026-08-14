@@ -14,7 +14,7 @@ body {
     border: 5px solid rgb(61, 61, 61);
 }
 .CasaBranca{
-  background-color:rgb(199, 138, 59);
+  background-color: #f0d9b5;
     width: 80px;
     height: 80px;
 
@@ -27,7 +27,7 @@ body {
 }
 
 .CasaPreta {
-    background-color:rgb(92, 62, 5);
+    background-color:#b58863;
     width: 80px;
     height: 80px;
 
@@ -61,3 +61,8 @@ body {
 .peca.bispo.preto.default { background-image: url(Imagens/Bispo_preto_default.png);}
 .peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
 .peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
+
+.CasaBranca.selecionada,
+.CasaPreta.selecionada {
+    background-color:rgb(39, 27, 19);
+}
