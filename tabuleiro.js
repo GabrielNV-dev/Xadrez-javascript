@@ -47,12 +47,13 @@ const alvo = document.getElementById("tabuleiro")
 
 const branco = "branco";
 const preto = "preto";
-let turno = branco;
+let turno = preto;
 
 let clique1 = null;
 
-function Mover(linha_A, coluna_A, linha_D, coluna_D){
-    const valido = gerenciador(linha_A, coluna_A, linha_D, coluna_D)
+function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
+
+    const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
 
     if (valido){ tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
 
@@ -76,6 +77,7 @@ function clique(linha, coluna, casa) {
             clique1 = null;
             return;
         }
+
         Mover(tabuleiro, clique1.linha, clique1.coluna, linha, coluna);
         clique1.elemento.classList.remove("selecionada");
         clique1 = null;
