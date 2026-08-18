@@ -17,12 +17,22 @@ function validarPeao(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimCo
 
 function validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
     const cor = peca.cor;
-    if (cor == "branco"){
-        return true
-    }
-    else{
+    let distanciaC = Math.abs(fimColuna - inicioColuna);
+    let distanciaL = Math.abs(fimLinha - inicioLinha);
+    let distancia = distanciaC > distanciaL ? distanciaC: distanciaL
+    let passeLinha = 0;
+    let passeColuna = 0;
 
-    }
+    if (inicioColuna != fimColuna && inicioLinha != fimLinha || (tabuleiro[fimLinha][fimColuna] && tabuleiro[fimLinha][fimColuna].cor === cor)){return false}
+    for (let i = 1; i < distancia; i++){
+        fimLinha === inicioLinha ? passeLinha = 0 : fimLinha > inicioLinha ? passeLinha = 1 : passeLinha = -1;
+        fimColuna === inicioColuna ? passeColuna = 0 : fimColuna > inicioColuna ? passeColuna = 1 : passeColuna = -1;
+        const linhaAtual = inicioLinha + passeLinha * i;
+        const colunaAtual = inicioColuna + passeColuna * i;
+        if (tabuleiro[linhaAtual][colunaAtual] !== null) {console.log(20); return false; }}
+
+    return true
+
 }
 
 export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColuna){
@@ -32,7 +42,7 @@ export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColu
         return validarPeao(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna) 
     }
     else if (peca.tipo === "torre"){
-        return validarTorre(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
+        return validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if(peca.tipo === "cavalo"){
         return //validarCavalo(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
