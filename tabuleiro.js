@@ -47,7 +47,7 @@ const alvo = document.getElementById("tabuleiro")
 
 const branco = "branco";
 const preto = "preto";
-let turno = preto;
+let turno = branco;
 
 let clique1 = null;
 
