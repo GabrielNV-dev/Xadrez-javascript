@@ -40,12 +40,53 @@ function validarCavalo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimC
     return false
 }
 function validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
-    const distancia = Math.abs(inicioLinha-fimLinha)
-    const diracaoL = fimLinha > fimLinha ? 1:-1
-    const diracaoC = inicioColuna > fimColuna ? 1:-1
+    if (Math.abs(inicioLinha-fimLinha) !== Math.abs(inicioColuna-fimColuna)){return false}
+    if (tabuleiro[fimLinha][fimColuna] && tabuleiro[fimLinha][fimColuna].cor == peca.cor){return false}
+    const distancia = Math.abs(inicioLinha-fimLinha)-1
 
-    return false
+    const diracaoL = inicioLinha > fimLinha ? -1:1
+    const diracaoC = inicioColuna > fimColuna ? -1:1
+
+    let linha = inicioLinha+diracaoL
+    let coluna = inicioColuna+diracaoC
+    console.log(inicioColuna +"|"+fimColuna)
+    for (let i=0; i<distancia; i++){
+        if(tabuleiro[linha][coluna] !== null){console.log(linha +"|"+coluna);return false}
+        linha += diracaoL
+        coluna += diracaoC
+    }
+    return true
 }
+function validarDama(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
+    if (validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna) || validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)){return true}
+}
+function validarRei(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
+    if (Math.abs(inicioColuna-fimColuna) === 2 && peca.moveu === false && inicioLinha === fimLinha){
+        
+        const passo = inicioColuna > fimColuna ? -1:1
+        const torre = inicioColuna > fimColuna ? 3:2
+        let colunaAtual = inicioColuna + passo
+
+        for (let i = 0; i < torre;i++){
+            if (tabuleiro[inicioLinha][colunaAtual] !== null){console.log(tabuleiro[inicioLinha][colunaAtual] !== null);return false}
+            colunaAtual = colunaAtual+passo
+        }
+        if (passo === 1 && tabuleiro[inicioLinha][7] &&  tabuleiro[inicioLinha][7].moveu === false){
+            tabuleiro[inicioLinha][5] = tabuleiro[inicioLinha][7]
+            tabuleiro[inicioLinha][7] = null;
+            return true
+        }
+        else if (passo === -1 && tabuleiro[inicioLinha][0] &&  tabuleiro[inicioLinha][0].moveu === false){
+            tabuleiro[inicioLinha][3] = tabuleiro[inicioLinha][0]
+            tabuleiro[inicioLinha][0] = null;
+            return true
+            }
+    }
+
+
+    if (Math.abs(inicioLinha-fimLinha) <= 1 && Math.abs(inicioColuna-fimColuna) <= 1){if((tabuleiro[fimLinha][fimColuna] && tabuleiro[fimLinha][fimColuna].cor == peca.cor)){return false}; return true}
+}
+
 export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColuna){
     const peca = tabuleiro[inicioLinha][inicioColuna]
 
@@ -62,10 +103,10 @@ export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColu
         return validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if (peca.tipo === "dama"){
-        return //validarDama(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
+        return validarDama(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if (peca.tipo === "rei"){
-        return //validarRei(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
+        return validarRei(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     } else {
         return false
     }

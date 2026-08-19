@@ -62,7 +62,13 @@ body {
 .peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
 .peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
 
+
+.CasaBranca:hover,
+.CasaPreta:hover{
+    filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+}
 .CasaBranca.selecionada,
 .CasaPreta.selecionada {
-    background-color:rgb(39, 27, 19);
+    background-color:rgb(54, 44, 30);
+    
 }

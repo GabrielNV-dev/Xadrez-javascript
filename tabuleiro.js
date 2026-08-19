@@ -36,6 +36,7 @@ function tabuleiroBack(){
     
     for (let c = 0; c < 8; c++) {
         tabuleiro[7][c] = criarPeca(brancas[c], "branco")
+
     }
 
     return tabuleiro
@@ -54,9 +55,9 @@ let clique1 = null;
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
-
-    if (valido){ tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
-
+   
+    if (valido){tabuleiro[linha_A][coluna_A].moveu = true; tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
+     
     vizualizar();
 }
 
@@ -72,6 +73,12 @@ function clique(linha, coluna, casa) {
 
         }
     } else {
+        if (tabuleiro[linha][coluna] && tabuleiro[clique1.linha][clique1.coluna] && tabuleiro[linha][coluna].cor == tabuleiro[clique1.linha][clique1.coluna].cor){
+            clique1.elemento.classList.remove("selecionada");
+            clique1 = { linha, coluna, elemento: casa };
+            casa.classList.add("selecionada");
+            return;
+        }
         if (clique1.linha === linha && clique1.coluna === coluna) {
             clique1.elemento.classList.remove("selecionada");
             clique1 = null;
