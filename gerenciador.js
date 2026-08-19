@@ -13,8 +13,7 @@ function validarPeao(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimCo
         if (tabuleiro[fimLinha][fimColuna]){if((fimColuna == inicioColuna+1 || fimColuna == inicioColuna-1) && fimLinha-inicioLinha == 1){return true}else{return false}}
         else if ( inicioColuna != fimColuna || fimLinha-inicioLinha > passo){return false}
         return true
-    }}
-
+}}
 function validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
     const cor = peca.cor;
     let distanciaC = Math.abs(fimColuna - inicioColuna);
@@ -34,7 +33,19 @@ function validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimC
     return true
 
 }
+function validarCavalo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
+    if (tabuleiro[fimLinha][fimColuna]){if (tabuleiro[fimLinha][fimColuna].cor == peca.cor){return false}}
+    if ((Math.abs(inicioLinha-fimLinha) == 2 && Math.abs(inicioColuna-fimColuna) == 1) || (Math.abs(inicioLinha-fimLinha) == 1 && Math.abs(inicioColuna-fimColuna) == 2)){return true}
+    
+    return false
+}
+function validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
+    const distancia = Math.abs(inicioLinha-fimLinha)
+    const diracaoL = fimLinha > fimLinha ? 1:-1
+    const diracaoC = inicioColuna > fimColuna ? 1:-1
 
+    return false
+}
 export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColuna){
     const peca = tabuleiro[inicioLinha][inicioColuna]
 
@@ -45,10 +56,10 @@ export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColu
         return validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if(peca.tipo === "cavalo"){
-        return //validarCavalo(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
+        return validarCavalo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if (peca.tipo === "bispo"){
-        return //validarBispo(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
+        return validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
     }
     else if (peca.tipo === "dama"){
         return //validarDama(tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna)
