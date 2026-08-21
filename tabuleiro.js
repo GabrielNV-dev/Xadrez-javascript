@@ -91,6 +91,228 @@ function clique(linha, coluna, casa) {
     }
 
 }
+
+
+function estiloTabu(){
+    const tabuleiros = [
+        // 0 - Clássico
+        ["#F0D9B5", "#B58863"],
+
+        // 1 - Pixel Art / Retrô
+        ["#E8D7B0", "#7A5230"],
+
+        // 2 - Madeira
+        ["#E6C79C", "#8B5A2B"],
+
+        // 3 - Carvalho
+        ["#E8CFA8", "#9A6B3F"],
+
+        // 4 - Mogno
+        ["#E2B49A", "#7B3F2A"],
+
+        // 5 - Verde Floresta
+        ["#DDE8D2", "#668F5A"],
+
+        // 6 - Verde Clássico
+        ["#EEEED2", "#769656"],
+
+        // 7 - Verde Escuro
+        ["#D8E4D0", "#4F7043"],
+
+        // 8 - Azul
+        ["#DCEAF2", "#5B7C99"],
+
+        // 9 - Azul Marinho
+        ["#D8E3F0", "#3F5F7A"],
+
+        // 10 - Gelo
+        ["#EAF4F4", "#7BA7B8"],
+
+        // 11 - Roxo
+        ["#E6D9F2", "#76549A"],
+
+        // 12 - Roxo Escuro
+        ["#DCD2E8", "#59406F"],
+
+        // 13 - Rosa
+        ["#F4DCE8", "#A35D7A"],
+
+        // 14 - Vermelho
+        ["#F2D6D0", "#8C3F3F"],
+
+        // 15 - Vermelho Escuro
+        ["#E8C8C5", "#6E2525"],
+
+        // 16 - Laranja
+        ["#F5D6B3", "#B8642A"],
+
+        // 17 - Amarelo
+        ["#FFF1B8", "#C49A32"],
+
+        // 18 - Preto e Branco
+        ["#F5F5F5", "#3A3A3A"],
+
+        // 19 - Cinza
+        ["#D9D9D9", "#707070"],
+
+        // 20 - Cinza Escuro
+        ["#BFC3C7", "#4A4F54"],
+
+        // 21 - Cyberpunk
+        ["#D8F3F0", "#6A3FA0"],
+
+        // 22 - Neon Azul
+        ["#D6F5FF", "#24527A"],
+
+        // 23 - Neon Verde
+        ["#E0FFD4", "#357A38"],
+
+        // 24 - Neon Rosa
+        ["#FFE0F0", "#A83279"],
+
+        // 25 - Deserto
+        ["#F5E6C8", "#C28E4A"],
+
+        // 26 - Areia
+        ["#F2E2C4", "#A87545"],
+
+        // 27 - Oceano
+        ["#D5EEF2", "#287B8E"],
+
+        // 28 - Mar
+        ["#D7F0EA", "#3C7A72"],
+
+        // 29 - Floresta
+        ["#D7E6C5", "#3E6338"],
+
+        // 30 - Pântano
+        ["#D5DEC4", "#52613B"],
+
+        // 31 - Outono
+        ["#F0D0A0", "#A65332"],
+
+        // 32 - Inverno
+        ["#EAF2F8", "#6B879C"],
+
+        // 33 - Primavera
+        ["#F3E8C8", "#7FA65A"],
+
+        // 34 - Crepúsculo
+        ["#E8D5E8", "#634B78"],
+
+        // 35 - Noite
+        ["#BFC9D9", "#30394A"],
+
+        // 36 - Lua
+        ["#E4E7EC", "#626A78"],
+
+        // 37 - Vulcão
+        ["#EBC4A8", "#7C3028"],
+
+        // 38 - Lava
+        ["#FFD0A8", "#9E2B25"],
+
+        // 39 - Ouro
+        ["#F5E6A8", "#9C792D"],
+
+        // 40 - Prata
+        ["#E5E7EA", "#747B84"],
+
+        // 41 - Bronze
+        ["#E6C9A5", "#79552D"],
+
+        // 42 - Café
+        ["#E8D3B7", "#6F4E37"],
+
+        // 43 - Chocolate
+        ["#E4C2A5", "#542F20"],
+
+        // 44 - Cereja
+        ["#F0D0D0", "#7D2638"],
+
+        // 45 - Lavanda
+        ["#E8E0F4", "#8064A2"],
+
+        // 46 - Turquesa
+        ["#D7F1EC", "#318C87"],
+
+        // 47 - Esmeralda
+        ["#D5E8D4", "#26734D"],
+
+        // 48 - Safira
+        ["#D6E3F5", "#315A91"],
+
+        // 49 - Rubi
+        ["#F0D0D0", "#8E2636"]
+    ];
+    var temaTabuleiro = 0;
+    
+    const tabu_tema = document.getElementById("tabuleiro-interface");
+    tabu_tema.addEventListener("click", () => {
+
+        temaTabuleiro = (temaTabuleiro + 1) % tabuleiros.length;
+        vizualizar()
+
+        const botoes = document.getElementsByClassName("button-configs-interface");
+        for (const botao of botoes) {
+            botao.style.display = "none";
+        }
+        document.getElementById("button-interface").style.display = "none"
+        let alvo = document.getElementById("interface")
+        
+        
+        const mini = document.createElement("div");
+        mini.style.display = "grid"
+        mini.style.gridTemplateColumns = "repeat(8,10px)"
+        mini.style.gridTemplateRows = "repeat(8,10px)"
+        mini.style.border = "4px solid rgb(61, 61, 61)"
+        {
+            for(let l = 0; l<8; l++){
+                for(let c = 0; c < 8 ; c++ ){
+
+                    const peca = tabuleiro[l][c]
+
+                    const div = document.createElement("div");
+                    div.classList.add("default")
+
+                    div.classList.add("mini")
+                    if (peca){
+                            div.classList.add("peca")
+                            div.classList.add(peca.tipo)
+                            div.classList.add(peca.cor)
+                            div.classList.add(temas[temaAtual])
+                    }
+
+                    div.dataset.l = l;
+                    div.dataset.c = c;
+
+                    if ((l+c)%2 === 1){
+                            div.classList.add("CasaBranca");
+                            //div.style.backgroundColor = estiloTabu()[0]
+                    } else{
+                            div.classList.add("CasaPreta");
+                            //div.style.backgroundColor = estiloTabu()[1]
+                        }
+
+                        mini.appendChild(div);
+                    }
+                }
+        }
+        
+
+    });
+}
+
+
+const temas = ["default", "pixelart"];
+var temaAtual = 0;
+
+const peca_tema = document.getElementById("peca-interface");
+peca_tema.addEventListener("click", () => {
+    temaAtual = (temaAtual + 1) % temas.length;
+    vizualizar()
+});
+
 function vizualizar(){
     alvo.innerHTML = "";
     for(let l = 0; l<8; l++){
@@ -99,6 +321,7 @@ function vizualizar(){
             const peca = tabuleiro[l][c]
 
             const div = document.createElement("div");
+            div.classList.add("default")
             div.addEventListener("click", () => {
                 clique(l, c, div);
             });
@@ -107,7 +330,7 @@ function vizualizar(){
                     div.classList.add("peca")
                     div.classList.add(peca.tipo)
                     div.classList.add(peca.cor)
-                    div.classList.add("default")
+                    div.classList.add(temas[temaAtual])
             }
 
             div.dataset.l = l;
@@ -115,12 +338,16 @@ function vizualizar(){
 
             if ((l+c)%2 === 1){
                     div.classList.add("CasaBranca");
-                }else{
+                    //div.style.backgroundColor = estiloTabu()[0]
+            } else{
                     div.classList.add("CasaPreta");
+                    
+                    //div.style.backgroundColor = estiloTabu()[1]
                 }
 
                 alvo.appendChild(div);
             }
         }
+    estiloTabu()
 }
 vizualizar();

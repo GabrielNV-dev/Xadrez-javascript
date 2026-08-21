@@ -28,7 +28,6 @@ body {
     font-size: 50px;
     cursor: pointer;
 }
-
 .CasaPreta {
     background-color:#b58863;
     width: 80px;
@@ -41,6 +40,7 @@ body {
     font-size: 50px;
     cursor: pointer;
 }
+
 .peca {
     display: flex;
     justify-content: center;
@@ -65,6 +65,50 @@ body {
 .peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
 .peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
 
+.peca.peao.branco.pixelart {background-image: url(Imagens/Peao_branco_pixelart.png);}
+.peca.torre.branco.pixelart { background-image: url(Imagens/Torre_branco_pixelart.png);}
+.peca.cavalo.branco.pixelart { background-image: url(Imagens/Cavalo_branco_pixelart.png);}
+.peca.bispo.branco.pixelart { background-image: url(Imagens/Bispo_branco_pixelart.png);}
+.peca.dama.branco.pixelart { background-image: url(Imagens/Dama_branco_pixelart.png);}
+.peca.rei.branco.pixelart { background-image: url(Imagens/Rei_branco_pixelart.png);}
+
+.peca.peao.preto.pixelart { background-image: url(Imagens/Peao_preto_pixelart.png);}
+.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
+.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
+.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
+.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
+.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
+
+.mini{
+    background-size: 100%;
+}
+.CasaBranca.mini{
+  background-color: #f0d9b5;
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+.CasaPreta.mini{
+    background-color:#b58863;
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 40px;
+    cursor: pointer;
+}
+.peca.pixelart {
+    background-size: 60%;
+}
 .CasaBranca:hover,
 .CasaPreta:hover{
     filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
@@ -102,9 +146,9 @@ body {
 }
 
 .button-configs-interface {
-    background-color: #f0d9b5d5;
+    background-color: #fdf583b4;
     width: 80px;
-    height: 50px;
+    height: 40px;
 
     display: flex;
 
@@ -112,7 +156,7 @@ body {
     align-items: center;
 
     font-size: 15px;
-    font-family:'Times New Roman', Times, serif;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     cursor: pointer;
 }
 .button-configs-interface:active {
