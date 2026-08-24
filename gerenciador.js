@@ -1,19 +1,19 @@
 function validarPeao(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
     const cor = peca.cor;
+    const distancia = Math.abs(inicioLinha - fimLinha)
+    const passe = inicioLinha == 1 || inicioLinha == 6 ? 2:1;
 
-    if (cor === "branco"){
-        let passo = inicioLinha != 6 || tabuleiro[inicioLinha-1][inicioColuna] ? 1 : 2;
+    if (distancia > passe){return false}
+    if(tabuleiro[fimLinha][fimColuna]){
+        if ((inicioLinha < fimLinha && cor === "branco") || (inicioLinha > fimLinha && cor === "preto") || (Math.abs(inicioColuna - fimColuna) != 1)){return false}
+    }
+    else{
+        if ((inicioLinha < fimLinha && cor === "branco") || (inicioLinha > fimLinha && cor === "preto") || (inicioColuna != fimColuna)){return false}
+    }
+    return true
+    
+}
 
-        if (tabuleiro[fimLinha][fimColuna]){if((fimColuna == inicioColuna+1 || fimColuna == inicioColuna-1) && inicioLinha-fimLinha == 1 && tabuleiro[fimLinha][fimColuna].cor != "branco"){return true}else{return false}}
-        else if ( inicioColuna != fimColuna || inicioLinha-fimLinha > passo){return false}
-        return true 
-    } else { 
-        let passo = inicioLinha != 1 || tabuleiro[inicioLinha+1][inicioColuna] ? 1 : 2;
-        
-        if (tabuleiro[fimLinha][fimColuna]){if((fimColuna == inicioColuna+1 || fimColuna == inicioColuna-1) && fimLinha-inicioLinha == 1){return true}else{return false}}
-        else if ( inicioColuna != fimColuna || fimLinha-inicioLinha > passo){return false}
-        return true
-}}
 function validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
     const cor = peca.cor;
     let distanciaC = Math.abs(fimColuna - inicioColuna);

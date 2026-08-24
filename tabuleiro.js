@@ -4,6 +4,7 @@ function criarPeca(tipo, cor) {
     return { tipo, cor, moveu: false};
 }
 
+
 function tabuleiroBack(){
     const tabuleiro = Array.from({ length: 8 }, () =>
         Array(8).fill(null)
@@ -58,7 +59,7 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
    
     if (valido){tabuleiro[linha_A][coluna_A].moveu = true; tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
      
-    vizualizar();
+    visualizar();
 }
 
 function clique(linha, coluna, casa) {
@@ -92,9 +93,7 @@ function clique(linha, coluna, casa) {
 
 }
 
-
-function estiloTabu(){
-    const tabuleiros = [
+const tabuleiros = [
         // 0 - Clássico
         ["#F0D9B5", "#B58863"],
 
@@ -244,65 +243,8 @@ function estiloTabu(){
 
         // 49 - Rubi
         ["#F0D0D0", "#8E2636"]
-    ];
-    var temaTabuleiro = 0;
-    
-    const tabu_tema = document.getElementById("tabuleiro-interface");
-    tabu_tema.addEventListener("click", () => {
-
-        temaTabuleiro = (temaTabuleiro + 1) % tabuleiros.length;
-        vizualizar()
-
-        const botoes = document.getElementsByClassName("button-configs-interface");
-        for (const botao of botoes) {
-            botao.style.display = "none";
-        }
-        document.getElementById("button-interface").style.display = "none"
-        let alvo = document.getElementById("interface")
-        
-        
-        const mini = document.createElement("div");
-        mini.style.display = "grid"
-        mini.style.gridTemplateColumns = "repeat(8,10px)"
-        mini.style.gridTemplateRows = "repeat(8,10px)"
-        mini.style.border = "4px solid rgb(61, 61, 61)"
-        {
-            for(let l = 0; l<8; l++){
-                for(let c = 0; c < 8 ; c++ ){
-
-                    const peca = tabuleiro[l][c]
-
-                    const div = document.createElement("div");
-                    div.classList.add("default")
-
-                    div.classList.add("mini")
-                    if (peca){
-                            div.classList.add("peca")
-                            div.classList.add(peca.tipo)
-                            div.classList.add(peca.cor)
-                            div.classList.add(temas[temaAtual])
-                    }
-
-                    div.dataset.l = l;
-                    div.dataset.c = c;
-
-                    if ((l+c)%2 === 1){
-                            div.classList.add("CasaBranca");
-                            //div.style.backgroundColor = estiloTabu()[0]
-                    } else{
-                            div.classList.add("CasaPreta");
-                            //div.style.backgroundColor = estiloTabu()[1]
-                        }
-
-                        mini.appendChild(div);
-                    }
-                }
-        }
-        
-
-    });
-}
-
+];
+var temaTabuleiro = 0;
 
 const temas = ["default", "pixelart"];
 var temaAtual = 0;
@@ -310,10 +252,10 @@ var temaAtual = 0;
 const peca_tema = document.getElementById("peca-interface");
 peca_tema.addEventListener("click", () => {
     temaAtual = (temaAtual + 1) % temas.length;
-    vizualizar()
+    visualizar()
 });
 
-function vizualizar(){
+function visualizar(){
     alvo.innerHTML = "";
     for(let l = 0; l<8; l++){
         for(let c = 0; c < 8 ; c++ ){
@@ -336,18 +278,54 @@ function vizualizar(){
             div.dataset.l = l;
             div.dataset.c = c;
 
+            const corIndex = temaTabuleiro % tabuleiros.length;
+
             if ((l+c)%2 === 1){
                     div.classList.add("CasaBranca");
-                    //div.style.backgroundColor = estiloTabu()[0]
+                    div.style.backgroundColor = tabuleiros[corIndex][0];
             } else{
                     div.classList.add("CasaPreta");
-                    
-                    //div.style.backgroundColor = estiloTabu()[1]
+                    div.style.backgroundColor = tabuleiros[corIndex][1];
                 }
 
                 alvo.appendChild(div);
             }
         }
-    estiloTabu()
 }
-vizualizar();
+
+const tabu_tema = document.getElementById("tabuleiro-interface");
+if (tabu_tema) {
+    tabu_tema.addEventListener("click", () => {
+        temaTabuleiro = (temaTabuleiro + 1) % tabuleiros.length; // Volta pro 0 se passar do último
+        visualizar();
+    });
+}
+const fundo_tema = document.getElementById("fundo-interface");
+
+const fundos = [
+    // 1. Verde Clássico de Torneio (Lembra muito os panos de mesa de xadrez tradicionais)
+    "radial-gradient(circle, rgba(1, 37, 7, 1) 0%, rgb(1, 102, 14) 5%, rgb(1, 37, 7) 50%)",
+    
+    // 2. Madeira Nobre / Mogno (Inspirado nas peças e tabuleiros de madeira clássicos)
+    "radial-gradient(circle, rgba(61, 26, 5, 1) 0%, rgb(117, 56, 15) 5%, rgb(38, 15, 2) 50%)",
+    
+    // 3. Azul Moderno / Tecnológico (Estilo plataformas de xadrez online modernas tipo Chess.com/Lichess)
+    "radial-gradient(circle, rgba(15, 23, 42, 1) 0%, rgb(30, 58, 138) 5%, rgb(10, 15, 30) 50%)",
+    
+    // 4. Minimalista Chumbo / Dark Mode (Foco total na concentração, inspirado em peças de mármore ou metal)
+    "radial-gradient(circle, rgba(40, 40, 40, 1) 0%, rgb(70, 70, 70) 5%, rgb(20, 20, 20) 50%)",
+    
+    // 5. Estilo Neo-Gótico / Ouro & Vinho (Para dar um toque luxuoso de "Rei e Rainha")
+    "radial-gradient(circle, rgba(74, 4, 4, 1) 0%, rgb(148, 103, 0) 5%, rgb(30, 2, 2) 50%)"
+];
+
+var temaFundo = 0;
+
+if (fundo_tema) {
+    fundo_tema.addEventListener("click", () => {
+        temaFundo = (temaFundo + 1) % fundos.length;
+        document.body.style.background = fundos[temaFundo];
+        
+    });
+}
+visualizar();
