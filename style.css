@@ -2,19 +2,104 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
   background-color: rgb(2, 39, 1);
   filter: brightness(1.1)  contrast(1.1);
   background: radial-gradient(circle,rgba(1, 37, 7, 1) 0%, rgb(1, 102, 14) 5%, rgb(1, 37, 7) 50%);
+
+}
+#game{
+    display: flex;
+    margin-left: 18px;
+    justify-content: center;
+    align-items: center;
+}
+.timer {
+    font-size: 20px;
+    font-weight: bold;
+    width: 100px; /* Mesma largura exata do seu tabuleiro (8 colunas * 80px = 640px) */
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border: 3px solid rgb(61, 61, 61); /* Mesma borda cinza do seu tabuleiro */
+    border-radius: 4px;
+    margin-left: 550px;
+    
+}
+.timer#timer-branco {
+    background-color: #ffffff; /* Mesmo tom escuro translúcido da sua interface */
+    color: #000000;
+    border-radius: 4px;
+}
+.timer#timer-preto {
+    background-color: #000000; /* Mesmo tom escuro translúcido da sua interface */
+    color: #ffffff;
+}
+
+.timer#timer-branco.rainbow {
+    border: 3px solid transparent; /* Largura ajustada para destacar a borda arco-íris */
+    border-radius: 4px;
+
+    /* A primeira linha define o fundo interno como BRANCO (#ffffff) */
+    background-image: 
+        linear-gradient(#ffffff, #ffffff), 
+        linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
+    
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size: 200% 100%;
+    
+    /* Altera a cor do texto para escuro para garantir contraste no fundo branco */
+    color: #181717; 
+    
+    animation: moverRainbow 3s linear infinite;
+}
+
+@keyframes moverRainbow {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 0%; /* Alinhado para animar o movimento continuo */
+    }
+}
+.timer#timer-preto.rainbow,
+#tabuleiro.rainbow{
+    border: 4px solid transparent;
+    border-radius: 8px; /* Funciona melhor com esta técnica */
+
+    background-image: 
+    linear-gradient(#121212, #121212), 
+    linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+
+    background-size: 200% 100%;
+    animation: moverRainbow 3s linear infinite;
+    }
+
+    @keyframes moverRainbow {
+    0% {
+    background-position: 0% 0%;
+    }
+    100% {
+    background-position: 200% 0%;
+    }
 }
 
 #tabuleiro{
-    
     background-color: rgb(0, 0, 0);
     display: grid;
     grid-template-columns: repeat(8,80px);
     grid-template-rows: repeat(8, 80px);
     border: 5px solid rgb(61, 61, 61);
 }
+
 .CasaBranca{
   background-color: #f0d9b5;
     width: 80px;
