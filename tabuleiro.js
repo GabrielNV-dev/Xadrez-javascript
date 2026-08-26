@@ -1,5 +1,4 @@
 import {gerenciador} from "./gerenciador.js";
-import {iniciarTimer} from "./timer.js";
 
 function criarPeca(tipo, cor) {
     return { tipo, cor, moveu: false};
@@ -53,6 +52,35 @@ const preto = "preto";
 let turno = branco;
 
 let clique1 = null;
+
+
+let tempoPreto = 600;
+let tempoBranco = 600;
+
+let intervaloAtivo = null;
+
+function formatarTempo(segundosTotal) {
+    let minutos = Math.floor(segundosTotal / 60);
+    let segundos = segundosTotal % 60;
+    
+    let minFormatado = minutos < 10 ? "0" + minutos : minutos;
+    let segFormatado = segundos < 10 ? "0" + segundos : segundos;
+    
+    return `${minFormatado}:${segFormatado}`;
+}
+function iniciarTimer(jogador) {
+    clearInterval(intervaloAtivo);
+
+    intervaloAtivo = setInterval(() => {
+        if (jogador === 'preto') {
+            tempoPreto--;
+            document.getElementById('preto').innerText = formatarTempo(tempoPreto);
+        } else {
+            tempoBranco--;
+            document.getElementById('branco').innerText = formatarTempo(tempoBranco);
+        }
+    }, 1000);
+}
 
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
 
