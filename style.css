@@ -163,33 +163,26 @@ body {
 .peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
 .peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
 
-.mini{
-    background-size: 100%;
-}
-.CasaBranca.mini{
-  background-color: #f0d9b5;
-    width: 20px;
-    height: 20px;
-
+.promove{
+    padding: 25px;
+    margin: 0px;
+    
     display: flex;
     justify-content: center;
     align-items: center;
 
-    font-size: 50px;
-    cursor: pointer;
+    background-color: #ffffff6b;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
-.CasaPreta.mini{
-    background-color:#b58863;
-    width: 20px;
-    height: 20px;
+.promove { background-image: url(Imagens/Peao_preto_default.png);}
+.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
+.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
+.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
+.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
+.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-size: 40px;
-    cursor: pointer;
-}
 .peca.pixelart {
     background-size: 60%;
 }
@@ -233,7 +226,17 @@ body {
     align-content: center;
     gap: 10px;
 }
+#promocao{
+    background-color: #18171796;
+    width: 200px;
+    height: 650px;
 
+    display: grid;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    gap: 50px;
+}
 .button-configs-interface {
     background-color: #fdf583b4;
     width: 80px;

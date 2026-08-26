@@ -85,9 +85,17 @@ function iniciarTimer(jogador) {
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
-   
-    if (valido){iniciarTimer(turno == "branco" ? "preto" : "branco");tabuleiro[linha_A][coluna_A].moveu = true; tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
-     
+    
+    if (valido){
+        iniciarTimer(turno == "branco" ? "preto" : "branco");
+        tabuleiro[linha_A][coluna_A].moveu = true; 
+        tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
+        tabuleiro[linha_A][coluna_A] = null; 
+        if (tabuleiro[linha_D][coluna_D].tipo === "peao" && (linha_D == 8 || linha_D == 0)){console.log(11)}
+        else{
+            turno === "preto" ? turno = "branco" : turno = "preto";
+        }
+    }
     visualizar();
 }
 
