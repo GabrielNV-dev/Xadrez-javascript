@@ -5,7 +5,7 @@ function validarPeao(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimCo
 
     if (distancia > passe){return false}
     if(tabuleiro[fimLinha][fimColuna]){
-        if ((inicioLinha < fimLinha && cor === "branco") || (inicioLinha > fimLinha && cor === "preto") || (Math.abs(inicioColuna - fimColuna) != 1)){return false}
+        if ((inicioLinha < fimLinha && cor === "branco") || (inicioLinha > fimLinha && cor === "preto") || (Math.abs(inicioColuna - fimColuna) != 1) || (distancia > 1)){return false}
     }
     else{
         if ((inicioLinha < fimLinha && cor === "branco") || (inicioLinha > fimLinha && cor === "preto") || (inicioColuna != fimColuna)){return false}

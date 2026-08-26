@@ -4,7 +4,6 @@ function criarPeca(tipo, cor) {
     return { tipo, cor, moveu: false};
 }
 
-
 function tabuleiroBack(){
     const tabuleiro = Array.from({ length: 8 }, () =>
         Array(8).fill(null)
@@ -56,7 +55,6 @@ let clique1 = null;
 
 let tempoPreto = 600;
 let tempoBranco = 600;
-
 let intervaloAtivo = null;
 
 function formatarTempo(segundosTotal) {
@@ -82,17 +80,57 @@ function iniciarTimer(jogador) {
     }, 1000);
 }
 
+var event_promo = 0;
+const painel_promocao = document.getElementById("promocao")
+
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
     
     if (valido){
-        iniciarTimer(turno == "branco" ? "preto" : "branco");
-        tabuleiro[linha_A][coluna_A].moveu = true; 
-        tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
-        tabuleiro[linha_A][coluna_A] = null; 
-        if (tabuleiro[linha_D][coluna_D].tipo === "peao" && (linha_D == 8 || linha_D == 0)){console.log(11)}
-        else{
+        if (tabuleiro[linha_A][coluna_A].tipo === "peao" && (linha_D == 7 || linha_D == 0)){
+            event_promo = 1
+            
+            painel_promocao.style.display = "grid"
+
+            const dama = document.getElementById("dama-promocao")
+            const torre = document.getElementById("torre-promocao")
+            const bispo = document.getElementById("bispo-promocao")
+            const cavalo = document.getElementById("cavalo-promocao")
+
+            var estilizacao = [[dama, "dama"], [torre,"torre"], [bispo,"bispo"], [cavalo,"cavalo"]]
+            for (let i = 0; i< estilizacao.length; i++){
+                estilizacao[i][0].classList.add(estilizacao[i][1])
+                estilizacao[i][0].classList.add("peca")
+                estilizacao[i][0].classList.add(tabuleiro[linha_A][coluna_A].cor)
+                estilizacao[i][0].classList.add(temas[temaAtual])
+            }
+            function logic_promotion(escolha){
+
+                tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
+                tabuleiro[linha_A][coluna_A] = null;  
+                tabuleiro[linha_D][coluna_D].tipo = escolha
+
+                visualizar();
+                iniciarTimer(turno == "branco" ? "preto" : "branco");
+                turno === "preto" ? turno = "branco" : turno = "preto";
+                event_promo = 0
+                painel_promocao.style.display = "none"
+
+            }
+
+            dama.addEventListener("click", () => {logic_promotion("dama")})
+            torre.addEventListener("click", () => {logic_promotion("torre")})
+            bispo.addEventListener("click", () => {logic_promotion("bispo")})
+            cavalo.addEventListener("click", () => {logic_promotion("cavalo")})
+        }
+
+        if(event_promo == 0){
+            tabuleiro[linha_A][coluna_A].moveu = true; 
+            tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
+            tabuleiro[linha_A][coluna_A] = null; 
+            
+            iniciarTimer(turno == "branco" ? "preto" : "branco");
             turno === "preto" ? turno = "branco" : turno = "preto";
         }
     }
@@ -128,6 +166,44 @@ function clique(linha, coluna, casa) {
         clique1 = null;
     }
 
+}
+
+function visualizar(){
+    alvo.innerHTML = "";
+    for(let l = 0; l<8; l++){
+        for(let c = 0; c < 8 ; c++ ){
+
+            const peca = tabuleiro[l][c]
+
+            const div = document.createElement("div");
+            div.classList.add("default")
+            div.addEventListener("click", () => {
+                clique(l, c, div);
+            });
+
+            if (peca){
+                    div.classList.add("peca")
+                    div.classList.add(peca.tipo)
+                    div.classList.add(peca.cor)
+                    div.classList.add(temas[temaAtual])
+            }
+
+            div.dataset.l = l;
+            div.dataset.c = c;
+
+            const corIndex = temaTabuleiro % tabuleiros.length;
+
+            if ((l+c)%2 === 1){
+                    div.classList.add("CasaBranca");
+                    div.style.backgroundColor = tabuleiros[corIndex][0];
+            } else{
+                    div.classList.add("CasaPreta");
+                    div.style.backgroundColor = tabuleiros[corIndex][1];
+                }
+
+                alvo.appendChild(div);
+            }
+        }
 }
 
 const tabuleiros = [
@@ -291,44 +367,6 @@ peca_tema.addEventListener("click", () => {
     temaAtual = (temaAtual + 1) % temas.length;
     visualizar()
 });
-
-function visualizar(){
-    alvo.innerHTML = "";
-    for(let l = 0; l<8; l++){
-        for(let c = 0; c < 8 ; c++ ){
-
-            const peca = tabuleiro[l][c]
-
-            const div = document.createElement("div");
-            div.classList.add("default")
-            div.addEventListener("click", () => {
-                clique(l, c, div);
-            });
-
-            if (peca){
-                    div.classList.add("peca")
-                    div.classList.add(peca.tipo)
-                    div.classList.add(peca.cor)
-                    div.classList.add(temas[temaAtual])
-            }
-
-            div.dataset.l = l;
-            div.dataset.c = c;
-
-            const corIndex = temaTabuleiro % tabuleiros.length;
-
-            if ((l+c)%2 === 1){
-                    div.classList.add("CasaBranca");
-                    div.style.backgroundColor = tabuleiros[corIndex][0];
-            } else{
-                    div.classList.add("CasaPreta");
-                    div.style.backgroundColor = tabuleiros[corIndex][1];
-                }
-
-                alvo.appendChild(div);
-            }
-        }
-}
 
 const tabu_tema = document.getElementById("tabuleiro-interface");
 if (tabu_tema) {

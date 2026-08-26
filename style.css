@@ -231,7 +231,7 @@ body {
     width: 200px;
     height: 650px;
 
-    display: grid;
+    display: none;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
