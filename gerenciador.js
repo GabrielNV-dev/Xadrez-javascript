@@ -28,7 +28,7 @@ function validarTorre(peca, tabuleiro, inicioLinha, inicioColuna, fimLinha, fimC
         fimColuna === inicioColuna ? passeColuna = 0 : fimColuna > inicioColuna ? passeColuna = 1 : passeColuna = -1;
         const linhaAtual = inicioLinha + passeLinha * i;
         const colunaAtual = inicioColuna + passeColuna * i;
-        if (tabuleiro[linhaAtual][colunaAtual] !== null) {console.log(20); return false; }}
+        if (tabuleiro[linhaAtual][colunaAtual] !== null) {return false; }}
 
     return true
 
@@ -49,9 +49,8 @@ function validarBispo(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimCo
 
     let linha = inicioLinha+diracaoL
     let coluna = inicioColuna+diracaoC
-    console.log(inicioColuna +"|"+fimColuna)
     for (let i=0; i<distancia; i++){
-        if(tabuleiro[linha][coluna] !== null){console.log(linha +"|"+coluna);return false}
+        if(tabuleiro[linha][coluna] !== null){return false}
         linha += diracaoL
         coluna += diracaoC
     }
@@ -68,7 +67,7 @@ function validarRei(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColu
         let colunaAtual = inicioColuna + passo
 
         for (let i = 0; i < torre;i++){
-            if (tabuleiro[inicioLinha][colunaAtual] !== null){console.log(tabuleiro[inicioLinha][colunaAtual] !== null);return false}
+            if (tabuleiro[inicioLinha][colunaAtual] !== null){return false}
             colunaAtual = colunaAtual+passo
         }
         if (passo === 1 && tabuleiro[inicioLinha][7] &&  tabuleiro[inicioLinha][7].moveu === false){

@@ -1,4 +1,5 @@
 import {gerenciador} from "./gerenciador.js";
+import {iniciarTimer} from "./timer.js";
 
 function criarPeca(tipo, cor) {
     return { tipo, cor, moveu: false};
@@ -57,7 +58,7 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
    
-    if (valido){tabuleiro[linha_A][coluna_A].moveu = true; tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
+    if (valido){iniciarTimer(turno == "branco" ? "preto" : "branco");tabuleiro[linha_A][coluna_A].moveu = true; tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; tabuleiro[linha_A][coluna_A] = null; turno === "preto" ? turno = "branco" : turno = "preto";}
      
     visualizar();
 }
