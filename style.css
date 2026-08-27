@@ -112,6 +112,66 @@ body {
     font-size: 50px;
     cursor: pointer;
 }
+
+.CasaPreta.check {
+
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.CasaPreta.check::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    background: rgb(255, 0, 0);
+    filter: blur(20px);
+    opacity: 100;
+    z-index: 0;
+}
+
+.CasaPreta.check > * {
+    position: relative;
+    z-index: 1;
+}
+
+.CasaBranca.check {
+
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.CasaBranca.check::before {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    background: rgb(255, 0, 0);
+    filter: blur(20px);
+    opacity: 100;
+    z-index: 0;
+}
+
+.CasaBranca.check > * {
+    position: relative;
+    z-index: 1;
+}
 .CasaPreta {
     background-color:#b58863;
     width: 80px;
@@ -163,8 +223,6 @@ body {
 .peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
 .peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
 
-.peca.ro.branco.default {background-image: url(Imagens/cristiano-ronaldo-nao-grita-nao-grita.png);}
-
 .promove{
     padding: 25px;
     margin: 0px;
@@ -188,9 +246,8 @@ body {
 .peca.pixelart {
     background-size: 60%;
 }
-.CasaBranca:hover,
-.CasaPreta:hover{
-    filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+.peca:hover {
+    filter: brightness(1.2) drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
 }
 .CasaBranca.selecionada,
 .CasaPreta.selecionada {
