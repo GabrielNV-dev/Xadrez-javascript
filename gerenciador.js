@@ -61,7 +61,6 @@ function validarDama(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimCol
 }
 function validarRei(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColuna){
     if (Math.abs(inicioColuna-fimColuna) === 2 && peca.moveu === false && inicioLinha === fimLinha){
-        
         const passo = inicioColuna > fimColuna ? -1:1
         const torre = inicioColuna > fimColuna ? 3:2
         let colunaAtual = inicioColuna + passo
@@ -81,9 +80,8 @@ function validarRei(peca,tabuleiro, inicioLinha, inicioColuna, fimLinha, fimColu
             return true
             }
     }
-
-
-    if (Math.abs(inicioLinha-fimLinha) <= 1 && Math.abs(inicioColuna-fimColuna) <= 1){if((tabuleiro[fimLinha][fimColuna] && tabuleiro[fimLinha][fimColuna].cor == peca.cor)){return false}; return true}
+    
+    else if (Math.abs(inicioLinha-fimLinha) <= 1 && Math.abs(inicioColuna-fimColuna) <= 1){if((tabuleiro[fimLinha][fimColuna] && tabuleiro[fimLinha][fimColuna].cor == peca.cor)){return false};return true}
 }
 
 export function gerenciador(tabuleiro, inicioLinha,inicioColuna,fimLinha,fimColuna){

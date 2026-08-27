@@ -80,6 +80,17 @@ function iniciarTimer(jogador) {
     }, 1000);
 }
 
+function verificarCheque(tabuleiro, l,c){
+
+    
+    const distanciaXleft = 7 - l
+    const distanciaXright = Math.abs(tabuleiro[l][c]) 
+    const distanciaYup = Math.abs(l - 7) 
+    const distanciaYdown = Math.abs(l - 0) 
+
+    
+}
+
 var event_promo = 0;
 const painel_promocao = document.getElementById("promocao")
 
@@ -88,6 +99,9 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
     
     if (valido){
+        if (event_promo === 1){
+            return
+        }
         if (tabuleiro[linha_A][coluna_A].tipo === "peao" && (linha_D == 7 || linha_D == 0)){
             event_promo = 1
             
@@ -110,7 +124,6 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
                 tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
                 tabuleiro[linha_A][coluna_A] = null;  
                 tabuleiro[linha_D][coluna_D].tipo = escolha
-
                 visualizar();
                 iniciarTimer(turno == "branco" ? "preto" : "branco");
                 turno === "preto" ? turno = "branco" : turno = "preto";
@@ -124,15 +137,27 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D){
             bispo.addEventListener("click", () => {logic_promotion("bispo")})
             cavalo.addEventListener("click", () => {logic_promotion("cavalo")})
         }
+        else{
 
-        if(event_promo == 0){
             tabuleiro[linha_A][coluna_A].moveu = true; 
             tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A]; 
             tabuleiro[linha_A][coluna_A] = null; 
             
-            iniciarTimer(turno == "branco" ? "preto" : "branco");
-            turno === "preto" ? turno = "branco" : turno = "preto";
+
         }
+        for(let l = 0; l<8; l++){
+            for(let c = 0; c < 8 ; c++ ){
+                if (tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor !== tabuleiro[linha_D][coluna_D].cor){
+                    verificarCheque(tabuleiro, l,c)
+                    break
+                    break
+                }
+            }
+        }
+
+        iniciarTimer(turno == "branco" ? "preto" : "branco");
+        turno === "preto" ? turno = "branco" : turno = "preto";
+        
     }
     visualizar();
 }

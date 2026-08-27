@@ -163,6 +163,8 @@ body {
 .peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
 .peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
 
+.peca.ro.branco.default {background-image: url(Imagens/cristiano-ronaldo-nao-grita-nao-grita.png);}
+
 .promove{
     padding: 25px;
     margin: 0px;
