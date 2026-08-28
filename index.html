@@ -1,10 +1,12 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="timer" id="timer-preto"> <span id="preto">10:00</span></div>
     <div id="game">
@@ -16,34 +18,43 @@
         </div>
         <div id="tabuleiro"></div>
         <div id="interface">
-        <button class="button-configs-interface" id="tabuleiro-interface">tabuleiro</button>
-        <button class="button-configs-interface" id="peca-interface">peças</button>
-        <button class="button-configs-interface" onclick="rainbow()" id="animacao-interface">animação</button>
+            <input type="text" id="tempo-personalizado" placeholder="10:00" value="10:00">
+            <button class="button-configs-interface" id="tabuleiro-interface">tabuleiro</button>
+            <button class="button-configs-interface" id="peca-interface">peças</button>
+            <button class="button-configs-interface" onclick="rainbow()" id="animacao-interface">animação</button>
+            <script>
+                var raibown = 0;
+                function rainbow() {
+                    const agentes = ["timer-preto", "timer-branco", "tabuleiro"]
+                    for (let i = 0; i < agentes.length; i++) {
+                        let alvo = document.getElementById(agentes[i])
+                        if (raibown === 0) { alvo.classList.add("rainbow") }
+                        else { alvo.classList.remove("rainbow") }
+                    }
+                    if (raibown == 0) { raibown = 1 } else { raibown = 0 }
+                }
+            </script>
+            <button class="button-configs-interface" id="fundo-interface">fundo</button>
+            <button class="button-configs-interface" id="tempo-interface">tempo</button>
+
+            <button class="button-configs-interface" id="modo-interface">modos</button>
+        </div>
+        
+        <button id="button-interface" onclick="viewInterface()">></button>
         <script>
-            var raibown = 0;
-            function rainbow(){
-                const agentes = ["timer-preto","timer-branco","tabuleiro"]
-                for(let i = 0; i < agentes.length; i++){
-                    let alvo = document.getElementById(agentes[i])
-                    if (raibown === 0){alvo.classList.add("rainbow")}
-                    else{alvo.classList.remove("rainbow")}}
-                if (raibown == 0){raibown = 1}else{raibown = 0}
+            let number = 0;
+            function viewInterface() {
+                const alvo = document.getElementById("interface")
+                if (number === 0) { alvo.style.display = "flex"; document.getElementById("button-interface").innerText = "<"; number = 1; number = 1 }
+                else { alvo.style.display = "none"; document.getElementById("button-interface").innerText = ">"; number = 0 }
             }
         </script>
-        <button class="button-configs-interface" id="fundo-interface">fundo</button>
     </div>
-    <button id="button-interface" onclick="viewInterface()">></button>
-    <script>
-        let number = 0;
-        function viewInterface(){
-            const alvo = document.getElementById("interface")
-            if (number === 0){alvo.style.display = "flex"; document.getElementById("button-interface").innerText = "<"; number = 1; number = 1}
-            else{alvo.style.display = "none"; document.getElementById("button-interface").innerText = ">"; number = 0}
-        }
-    </script>
-    </div>
+    <div id="modos">
+        </div>
     <div class="timer" id="timer-branco"> <span id="branco">10:00</span></div>
     <script type="module" src="tabuleiro.js"></script>
-    
+
 </body>
+
 </html>

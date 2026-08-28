@@ -1,7 +1,7 @@
 import { gerenciador } from "./gerenciador.js";
 
 function criarPeca(tipo, cor) {
-    return { tipo, cor, moveu: false, check:false, trancado:false };
+    return { tipo, cor, moveu: false, check: false, enpassant: false };
 }
 
 function tabuleiroBack() {
@@ -53,9 +53,9 @@ let turno = branco;
 let clique1 = null;
 
 
-let tempoPreto = 600;
 let tempoBranco = 600;
-let intervaloAtivo = null;
+let tempoPreto = 600;
+let intervaloAtivo;
 
 function formatarTempo(segundosTotal) {
     let minutos = Math.floor(segundosTotal / 60);
@@ -67,18 +67,57 @@ function formatarTempo(segundosTotal) {
     return `${minFormatado}:${segFormatado}`;
 }
 
+function definirTempo() {
+    let valor = document.getElementById("tempo-personalizado").value;
+
+    // Divide "10:00" em minutos e segundos
+    let partes = valor.split(":");
+
+    let minutos = parseInt(partes[0]);
+    let segundos = parseInt(partes[1]);
+
+    // Verifica se o valor é válido
+    if (isNaN(minutos) || isNaN(segundos) || segundos >= 60) {
+        alert("Digite um tempo válido. Exemplo: 10:00");
+        return;
+    }
+
+    let tempoTotal = (minutos * 60) + segundos;
+
+    // Define o mesmo tempo para os dois jogadores
+    tempoBranco = tempoTotal;
+    tempoPreto = tempoTotal;
+
+    // Atualiza os relógios imediatamente
+    document.getElementById("timer-branco").innerText = formatarTempo(tempoBranco);
+    document.getElementById("timer-preto").innerText = formatarTempo(tempoPreto);
+}
 function iniciarTimer(jogador) {
     clearInterval(intervaloAtivo);
 
-    intervaloAtivo = setInterval(() => {
-        if (jogador === 'preto') {
-            tempoPreto--;
-            document.getElementById('preto').innerText = formatarTempo(tempoPreto);
-        } else {
-            tempoBranco--;
-            document.getElementById('branco').innerText = formatarTempo(tempoBranco);
-        }
-    }, 1000);
+    if (document.getElementById("timer-branco").style.display === "flex") {
+
+        intervaloAtivo = setInterval(() => {
+
+            if (jogador === 'preto') {
+
+                if (tempoPreto > 0) {
+                    tempoPreto--;
+                    document.getElementById('timer-preto').innerText =
+                        formatarTempo(tempoPreto);
+                }
+
+            } else {
+
+                if (tempoBranco > 0) {
+                    tempoBranco--;
+                    document.getElementById('timer-branco').innerText =
+                        formatarTempo(tempoBranco);
+                }
+            }
+
+        }, 1000);
+    }
 }
 
 function verificarCheque(tabuleiro, l, c) {
@@ -102,24 +141,66 @@ function verificarCheque(tabuleiro, l, c) {
                     return true;
 
                 } else if (
-                    (destino.tipo === "dama" || destino.tipo === "torre")) {   
+                    (destino.tipo === "dama" || destino.tipo === "torre")) {
                     return true;
                 }
+            }
+        }
+    }
+    const movimentosCavalo = [
+        [-2, -1], [-2, 1], [-1, -2], [-1, 2],
+        [1, -2], [1, 2], [2, -1], [2, 1]
+    ];
+    for (const [ml, mc] of movimentosCavalo) {
+        const linhaAtual = l + ml;
+        const colunaAtual = c + mc;
+
+        if (linhaAtual >= 0 && linhaAtual <= 7 && colunaAtual >= 0 && colunaAtual <= 7) {
+            const destino = tabuleiro[linhaAtual][colunaAtual];
+            if (destino && destino.tipo === "cavalo" && destino.cor !== rei.cor) {
+                return true;
+            }
+        }
+    }
+    const direcaoPeao = rei.cor === "branco" ? -1 : 1;
+    const colunasPeao = [-1, 1];
+
+    for (const dc of colunasPeao) {
+        const linhaAtual = l + direcaoPeao;
+        const colunaAtual = c + dc;
+
+        if (linhaAtual >= 0 && linhaAtual <= 7 && colunaAtual >= 0 && colunaAtual <= 7) {
+            const destino = tabuleiro[linhaAtual][colunaAtual];
+            if (destino && destino.tipo === "peao" && destino.cor !== rei.cor) {
+                return true;
+            }
+        }
+    }
+
+
+    const movimentosRei = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+    for (const [rl, rc] of movimentosRei) {
+        const linhaAtual = l + rl;
+        const colunaAtual = c + rc;
+        if (linhaAtual >= 0 && linhaAtual <= 7 && colunaAtual >= 0 && colunaAtual <= 7) {
+            const destino = tabuleiro[linhaAtual][colunaAtual];
+            if (destino && destino.tipo === "rei" && destino.cor !== rei.cor) {
+                return true;
             }
         }
     }
     return false
 }
 
-function obrigarCheckResolution(tabuleiro, linha_A, coluna_A, linha_D, coluna_D,l,c){
+function obrigarCheckResolution(tabuleiro, linha_A, coluna_A, linha_D, coluna_D, l, c) {
     tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A];
     tabuleiro[linha_A][coluna_A] = null;
-    if (tabuleiro[linha_D][coluna_D].tipo == "rei"){
-        if (verificarCheque(tabuleiro,linha_D,coluna_D)){
+    if (tabuleiro[linha_D][coluna_D].tipo == "rei") {
+        if (verificarCheque(tabuleiro, linha_D, coluna_D)) {
             return false
+        }
     }
-    }
-    else if (verificarCheque(tabuleiro,l,c)){
+    else if (verificarCheque(tabuleiro, l, c)) {
         return false
     }
     return true
@@ -130,26 +211,29 @@ const painel_promocao = document.getElementById("promocao")
 
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
 
-    for (let l = 0; l < 8; l++) {
-            for (let c = 0; c < 8; c++) {
-                if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor === tabuleiro[linha_A][coluna_A].cor){
-                    let copia = structuredClone(tabuleiro)
-                    if(!obrigarCheckResolution(copia, linha_A, coluna_A, linha_D, coluna_D, l, c)){
-                        console.log("dewdewd")
-                        return false
-                       }
-                    }
-                
-            }
-        }
+
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
 
     if (valido) {
+        for (let l = 0; l < 8; l++) {
+            for (let c = 0; c < 8; c++) {
+                if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'peao' && tabuleiro[l][c].cor !== tabuleiro[linha_A][coluna_A].cor) {
+                    tabuleiro[l][c].enpassant = false
+                }
+                else if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor === tabuleiro[linha_A][coluna_A].cor) {
+                    let copia = structuredClone(tabuleiro)
+                    if (!obrigarCheckResolution(copia, linha_A, coluna_A, linha_D, coluna_D, l, c)) {
+                        return false
+                    }
+                }
+            }
+        }
         if (event_promo === 1) {
             return
         }
-        if (tabuleiro[linha_A][coluna_A].tipo === "peao" && (linha_D == 7 || linha_D == 0)) {
+
+        else if (tabuleiro[linha_A][coluna_A].tipo === "peao" && (linha_D == 7 || linha_D == 0)) {
             event_promo = 1
 
             painel_promocao.style.display = "grid"
@@ -171,11 +255,27 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
                 tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A];
                 tabuleiro[linha_A][coluna_A] = null;
                 tabuleiro[linha_D][coluna_D].tipo = escolha
-                visualizar();
+                for (let l = 0; l < 8; l++) {
+                    for (let c = 0; c < 8; c++) {
+                        if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor === tabuleiro[linha_D][coluna_D].cor) {
+                            tabuleiro[l][c].check = false
+                        }
+                        if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor !== tabuleiro[linha_D][coluna_D].cor) {
+                            tabuleiro[l][c].check = false
+                            if (verificarCheque(tabuleiro, l, c)) {
+                                tabuleiro[l][c].check = true
+                            }
+                            break
+                            break
+                        }
+                    }
+                }
+
                 iniciarTimer(turno == "branco" ? "preto" : "branco");
                 turno === "preto" ? turno = "branco" : turno = "preto";
                 event_promo = 0
                 painel_promocao.style.display = "none"
+                visualizar();
 
             }
 
@@ -184,31 +284,32 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
             bispo.addEventListener("click", () => { logic_promotion("bispo") })
             cavalo.addEventListener("click", () => { logic_promotion("cavalo") })
         }
-        else {
+        else if (event_promo === 0) {
 
             tabuleiro[linha_A][coluna_A].moveu = true;
             tabuleiro[linha_D][coluna_D] = tabuleiro[linha_A][coluna_A];
             tabuleiro[linha_A][coluna_A] = null;
 
-
-        }
-        for (let l = 0; l < 8; l++) {
-            for (let c = 0; c < 8; c++) {
-                if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor === tabuleiro[linha_D][coluna_D].cor) {
-                    tabuleiro[l][c].check = false
-                }
-                if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor !== tabuleiro[linha_D][coluna_D].cor) {
-                    tabuleiro[l][c].check = false
-                    if (verificarCheque(tabuleiro, l, c)){
-                        tabuleiro[l][c].check = true
+            for (let l = 0; l < 8; l++) {
+                for (let c = 0; c < 8; c++) {
+                    if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor === tabuleiro[linha_D][coluna_D].cor) {
+                        tabuleiro[l][c].check = false
                     }
-                    break
-                    break
+                    if (tabuleiro[l][c] && tabuleiro[l][c].tipo === 'rei' && tabuleiro[l][c].cor !== tabuleiro[linha_D][coluna_D].cor) {
+                        tabuleiro[l][c].check = false
+                        if (verificarCheque(tabuleiro, l, c)) {
+                            tabuleiro[l][c].check = true
+                        }
+                        break
+                        break
+                    }
                 }
             }
+            iniciarTimer(turno == "branco" ? "preto" : "branco");
+            turno === "preto" ? turno = "branco" : turno = "preto";
+
         }
-        iniciarTimer(turno == "branco" ? "preto" : "branco");
-        turno === "preto" ? turno = "branco" : turno = "preto";
+
 
     }
     visualizar();
@@ -263,7 +364,7 @@ function visualizar() {
                 div.classList.add(peca.tipo)
                 div.classList.add(peca.cor)
                 div.classList.add(temas[temaAtual])
-                if (peca.check){
+                if (peca.check) {
                     div.classList.add("check")
                 }
             }
@@ -285,6 +386,7 @@ function visualizar() {
         }
     }
 }
+
 
 const tabuleiros = [
     // 0 - Clássico
@@ -438,7 +540,6 @@ const tabuleiros = [
     ["#F0D0D0", "#8E2636"]
 ];
 var temaTabuleiro = 0;
-
 const temas = ["default", "pixelart"];
 var temaAtual = 0;
 
@@ -456,7 +557,6 @@ if (tabu_tema) {
     });
 }
 const fundo_tema = document.getElementById("fundo-interface");
-
 const fundos = [
     // 1. Verde Clássico de Torneio (Lembra muito os panos de mesa de xadrez tradicionais)
     "radial-gradient(circle, rgba(1, 37, 7, 1) 0%, rgb(1, 102, 14) 5%, rgb(1, 37, 7) 50%)",
@@ -473,7 +573,6 @@ const fundos = [
     // 5. Estilo Neo-Gótico / Ouro & Vinho (Para dar um toque luxuoso de "Rei e Rainha")
     "radial-gradient(circle, rgba(74, 4, 4, 1) 0%, rgb(148, 103, 0) 5%, rgb(30, 2, 2) 50%)"
 ];
-
 var temaFundo = 0;
 
 if (fundo_tema) {
@@ -481,6 +580,43 @@ if (fundo_tema) {
         temaFundo = (temaFundo + 1) % fundos.length;
         document.body.style.background = fundos[temaFundo];
 
+    });
+}
+
+var tempo = 0;
+
+const fundo_tempo = document.getElementById("tempo-interface");
+const timers = document.querySelectorAll(".timer");
+
+if (fundo_tempo) {
+    fundo_tempo.addEventListener("click", () => {
+
+        if (tempo === 0) {
+            timers.forEach(timer => {
+                timer.style.display = "flex";
+                document.getElementById("tempo-personalizado").style.display = "flex"
+            });
+
+            tempo = 1;
+
+        } else {
+            timers.forEach(timer => {
+                document.getElementById("tempo-personalizado").style.display = "none"
+                timer.style.display = "none";
+            });
+
+            tempo = 0;
+        }
+
+    });
+}
+const timer = document.getElementById("tempo-personalizado");
+
+if (timer) {
+    timer.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            definirTempo();
+        }
     });
 }
 visualizar();
