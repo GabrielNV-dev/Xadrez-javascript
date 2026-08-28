@@ -4,47 +4,105 @@ function criarPeca(tipo, cor) {
     return { tipo, cor, moveu: false, check: false, enpassant: false };
 }
 
-function tabuleiroBack() {
+function tabuleiroBack(modoatual) {
+
     const tabuleiro = Array.from({ length: 8 }, () =>
-        Array(8).fill(null)
-    )
+            Array(8).fill(null)
+        )
+    if (modoatual == "modo-default") {
 
-    const pretas = [
-        "torre", "cavalo", "bispo", "dama",
-        "rei", "bispo", "cavalo", "torre"
-    ]
+        const pretas = [
+            "torre", "cavalo", "bispo", "dama",
+            "rei", "bispo", "cavalo", "torre"
+        ]
 
-    const brancas = [
-        "torre", "cavalo", "bispo", "dama",
-        "rei", "bispo", "cavalo", "torre"
-    ]
+        const brancas = [
+            "torre", "cavalo", "bispo", "dama",
+            "rei", "bispo", "cavalo", "torre"
+        ]
 
-    for (let c = 0; c < 8; c++) {
-        tabuleiro[0][c] = criarPeca(pretas[c], "preto")
-    }
-
-
-    for (let c = 0; c < 8; c++) {
-        tabuleiro[1][c] = criarPeca("peao", "preto")
-    }
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[0][c] = criarPeca(pretas[c], "preto")
+        }
 
 
-    for (let c = 0; c < 8; c++) {
-        tabuleiro[6][c] = criarPeca("peao", "branco")
-    }
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[1][c] = criarPeca("peao", "preto")
+        }
 
 
-    for (let c = 0; c < 8; c++) {
-        tabuleiro[7][c] = criarPeca(brancas[c], "branco")
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[6][c] = criarPeca("peao", "branco")
+        }
 
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[7][c] = criarPeca(brancas[c], "branco")
+
+        }
+    } else if (modoatual == "modo-960") {
+
+        const pretas = [
+            "torre", "cavalo", "bispo", "dama",
+            "rei", "bispo", "cavalo", "torre"
+        ]
+
+        const brancas = [
+            "torre", "cavalo", "bispo", "dama",
+            "rei", "bispo", "cavalo", "torre"
+        ]
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[4][c] = criarPeca(pretas[c], "preto")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[1][c] = criarPeca("peao", "preto")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[6][c] = criarPeca("peao", "branco")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[7][c] = criarPeca(brancas[c], "branco")
+
+        }
     }
 
     return tabuleiro
 }
+const modo_btn = document.getElementById("modo-interface");
+let tl_modo = 0;
 
-const tabuleiro = tabuleiroBack()
+if (modo_btn) {
+    modo_btn.addEventListener("click", () => {
+        if (tl_modo === 0) {
+            tl_modo = 1;
+            document.getElementById("modos").style.display = "flex";
+        } else {
+            tl_modo = 0;
+            document.getElementById("modos").style.display = "none";
+        }
+
+    });
+}
+let modoAtual = "modo-default";
+var tabuleiro = tabuleiroBack(modoAtual)
+const botoesModo = document.querySelectorAll(".button-configs-modos");
+botoesModo.forEach(botao => {
+    botao.addEventListener("click", () => {
+        
+        modoAtual = botao.id;
+        tabuleiro = tabuleiroBack(modoAtual)
+        visualizar()
+    });
+});
+
 const alvo = document.getElementById("tabuleiro")
-
 
 const branco = "branco";
 const preto = "preto";
@@ -140,7 +198,12 @@ function verificarCheque(tabuleiro, l, c) {
                     (destino.tipo === "dama" || destino.tipo === "bispo")) {
                     return true;
 
-                } else if (
+                } else if (Math.abs(linhaAtual - l) === Math.abs(colunaAtual - c) && destino.tipo === "torre") {
+                    break;
+                } else if ((linha === 0 || coluna === 0) && destino.tipo === "bispo") {
+                    break
+                }
+                else if (
                     (destino.tipo === "dama" || destino.tipo === "torre")) {
                     return true;
                 }
@@ -375,11 +438,11 @@ function visualizar() {
             const corIndex = temaTabuleiro % tabuleiros.length;
 
             if ((l + c) % 2 === 1) {
-                div.classList.add("CasaBranca");
-                div.style.backgroundColor = tabuleiros[corIndex][0];
-            } else {
                 div.classList.add("CasaPreta");
                 div.style.backgroundColor = tabuleiros[corIndex][1];
+            } else {
+                div.classList.add("CasaBranca");
+                div.style.backgroundColor = tabuleiros[corIndex][0];
             }
 
             alvo.appendChild(div);

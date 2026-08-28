@@ -39,7 +39,7 @@
 
             <button class="button-configs-interface" id="modo-interface">modos</button>
         </div>
-        
+
         <button id="button-interface" onclick="viewInterface()">></button>
         <script>
             let number = 0;
@@ -49,9 +49,14 @@
                 else { alvo.style.display = "none"; document.getElementById("button-interface").innerText = ">"; number = 0 }
             }
         </script>
+
     </div>
     <div id="modos">
-        </div>
+        <button class="button-configs-modos" id="modo-default">Normal</button>
+        <button class="button-configs-modos" id="modo-960">960</button>
+        <button class="button-configs-modos" id="modo-rei">rei solitario</button>
+        <button class="button-configs-modos" id="moddso-maluco">lugar maluco</button>
+    </div>
     <div class="timer" id="timer-branco"> <span id="branco">10:00</span></div>
     <script type="module" src="tabuleiro.js"></script>
 

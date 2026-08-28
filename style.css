@@ -317,11 +317,29 @@ body {
     width: 650px;
     height: 100px;
 
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     justify-content: center;
     align-content: center;
 
+}
+.button-configs-modos {
+    background-color: #7c7c7c;
+    width: 60px;
+    height: 60px;
+    margin: 15;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 15px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    cursor: pointer;
+
+}
+.button-configs-modos:active {
+    transform: translateY(5px);
 }
 #promocao{
     background-color: #18171796;
