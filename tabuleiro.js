@@ -7,19 +7,18 @@ function criarPeca(tipo, cor) {
 function tabuleiroBack(modoatual) {
 
     const tabuleiro = Array.from({ length: 8 }, () =>
-            Array(8).fill(null)
-        )
+        Array(8).fill(null)
+    )
+    const pretas = [
+        "torre", "cavalo", "bispo", "dama",
+        "rei", "bispo", "cavalo", "torre"
+    ]
+
+    const brancas = [
+        "torre", "cavalo", "bispo", "dama",
+        "rei", "bispo", "cavalo", "torre"
+    ]
     if (modoatual == "modo-default") {
-
-        const pretas = [
-            "torre", "cavalo", "bispo", "dama",
-            "rei", "bispo", "cavalo", "torre"
-        ]
-
-        const brancas = [
-            "torre", "cavalo", "bispo", "dama",
-            "rei", "bispo", "cavalo", "torre"
-        ]
 
         for (let c = 0; c < 8; c++) {
             tabuleiro[0][c] = criarPeca(pretas[c], "preto")
@@ -42,18 +41,32 @@ function tabuleiroBack(modoatual) {
         }
     } else if (modoatual == "modo-960") {
 
-        const pretas = [
-            "torre", "cavalo", "bispo", "dama",
-            "rei", "bispo", "cavalo", "torre"
-        ]
+        let coordenadas = [];
+        const tabela = {
+            0: "torre",
+            1: "cavalo",
+            2: "bispo",
+            3: "dama",
+            4: "rei"
+        };
 
-        const brancas = [
-            "torre", "cavalo", "bispo", "dama",
-            "rei", "bispo", "cavalo", "torre"
-        ]
+        while (coordenadas.length < 8) {
+
+            let number_ale = Math.floor(Math.random() * 5);
+            let valor = tabela[number_ale];
+
+            let quantidade = coordenadas.filter(n => n === number_ale).length;
+
+            if ((valor === "dama" || valor === "rei") && quantidade === 0) {
+                coordenadas.push(number_ale);
+            }
+            else if (valor !== "dama" && valor !== "rei" && quantidade < 2) {
+                coordenadas.push(number_ale);
+            }
+        }
 
         for (let c = 0; c < 8; c++) {
-            tabuleiro[4][c] = criarPeca(pretas[c], "preto")
+            tabuleiro[0][c] = criarPeca(pretas[coordenadas[c]], "preto")
         }
 
 
@@ -68,7 +81,7 @@ function tabuleiroBack(modoatual) {
 
 
         for (let c = 0; c < 8; c++) {
-            tabuleiro[7][c] = criarPeca(brancas[c], "branco")
+            tabuleiro[7][c] = criarPeca(brancas[coordenadas[c]], "branco")
 
         }
     }
@@ -95,7 +108,7 @@ var tabuleiro = tabuleiroBack(modoAtual)
 const botoesModo = document.querySelectorAll(".button-configs-modos");
 botoesModo.forEach(botao => {
     botao.addEventListener("click", () => {
-        
+
         modoAtual = botao.id;
         tabuleiro = tabuleiroBack(modoAtual)
         visualizar()
