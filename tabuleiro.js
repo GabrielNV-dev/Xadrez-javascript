@@ -5,7 +5,7 @@ function criarPeca(tipo, cor) {
 }
 
 function tabuleiroBack(modoatual) {
-
+    
     const tabuleiro = Array.from({ length: 8 }, () =>
         Array(8).fill(null)
     )
@@ -84,6 +84,51 @@ function tabuleiroBack(modoatual) {
             tabuleiro[7][c] = criarPeca(brancas[coordenadas[c]], "branco")
 
         }
+    } else if (modoatual == "modo-rei") {
+
+        let coordenadas = [];
+        const tabela = {
+            0: "torre",
+            1: "cavalo",
+            2: "bispo",
+            3: "dama",
+            4: "rei"
+        };
+
+        while (coordenadas.length < 2) {
+
+            let number_ale = Math.floor(Math.random() * 3);
+            let valor = tabela[number_ale];
+
+            let quantidade = coordenadas.filter(n => n === number_ale).length;
+
+            if ((valor === "dama" || valor === "rei") && quantidade === 0) {
+                coordenadas.push(number_ale);
+            }
+            else if (valor !== "dama" && valor !== "rei" && quantidade < 2) {
+                coordenadas.push(number_ale);
+            }
+        }
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[0][c] = criarPeca(pretas[coordenadas[c]], "preto")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[1][c] = criarPeca("peao", "preto")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[6][c] = criarPeca("peao", "branco")
+        }
+
+
+        for (let c = 0; c < 8; c++) {
+            tabuleiro[7][c] = criarPeca(brancas[coordenadas[c]], "branco")
+
+        }
     }
 
     return tabuleiro
@@ -108,6 +153,9 @@ var tabuleiro = tabuleiroBack(modoAtual)
 const botoesModo = document.querySelectorAll(".button-configs-modos");
 botoesModo.forEach(botao => {
     botao.addEventListener("click", () => {
+        turno = "branco";
+        clique1 = null;
+        definirTempo()
 
         modoAtual = botao.id;
         tabuleiro = tabuleiroBack(modoAtual)
