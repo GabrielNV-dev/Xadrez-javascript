@@ -84,34 +84,11 @@ function tabuleiroBack(modoatual) {
             tabuleiro[7][c] = criarPeca(brancas[coordenadas[c]], "branco")
 
         }
+    
     } else if (modoatual == "modo-rei") {
-
-        let coordenadas = [];
-        const tabela = {
-            0: "torre",
-            1: "cavalo",
-            2: "bispo",
-            3: "dama",
-            4: "rei"
-        };
-
-        while (coordenadas.length < 2) {
-
-            let number_ale = Math.floor(Math.random() * 3);
-            let valor = tabela[number_ale];
-
-            let quantidade = coordenadas.filter(n => n === number_ale).length;
-
-            if ((valor === "dama" || valor === "rei") && quantidade === 0) {
-                coordenadas.push(number_ale);
-            }
-            else if (valor !== "dama" && valor !== "rei" && quantidade < 2) {
-                coordenadas.push(number_ale);
-            }
-        }
-
         for (let c = 0; c < 8; c++) {
-            tabuleiro[0][c] = criarPeca(pretas[coordenadas[c]], "preto")
+            if(c === 0 || c === 7){tabuleiro[0][c] = criarPeca("dama", "preto")} else if(c === 3){tabuleiro[0][c] = criarPeca("torre", "preto")}else{
+            tabuleiro[0][c] = criarPeca(pretas[c], "preto")}
         }
 
 
@@ -126,11 +103,102 @@ function tabuleiroBack(modoatual) {
 
 
         for (let c = 0; c < 8; c++) {
-            tabuleiro[7][c] = criarPeca(brancas[coordenadas[c]], "branco")
+            if(c === 0 || c === 7){tabuleiro[7][c] = criarPeca("dama", "branco")} else if(c === 3){tabuleiro[7][c] = criarPeca("torre", "branco")}else{
+            tabuleiro[7][c] = criarPeca(pretas[c], "branco")}
+        }
+    } else if (modoatual == "modo-maluco") {
 
+    function colocarPecasAleatorias(pecas, cor, linhas) {
+
+        let casas = [];
+
+        for (let linha of linhas) {
+            for (let coluna = 0; coluna < 8; coluna++) {
+                casas.push([linha, coluna]);
+            }
+        }
+
+        for (let peca of pecas) {
+
+            let indice = Math.floor(Math.random() * casas.length);
+
+            let [linha, coluna] = casas[indice];
+
+            tabuleiro[linha][coluna] = criarPeca(peca, cor);
+
+            casas.splice(indice, 1);
         }
     }
 
+
+    function encontrarRei(cor) {
+
+        for (let l = 0; l < 8; l++) {
+            for (let c = 0; c < 8; c++) {
+
+                let peca = tabuleiro[l][c];
+
+                if (peca && peca.tipo === "rei" && peca.cor === cor) {
+                    return [l, c];
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+    let valido = false;
+
+    while (!valido) {
+
+        // Limpa o tabuleiro
+        for (let l = 0; l < 8; l++) {
+            for (let c = 0; c < 8; c++) {
+                tabuleiro[l][c] = null;
+            }
+        }
+
+        // Pretas nas linhas 0-3
+        colocarPecasAleatorias(
+            pretas,
+            "preto",
+            [0, 1, 2, 3]
+        );
+
+        // Brancas nas linhas 4-7
+        colocarPecasAleatorias(
+            brancas,
+            "branco",
+            [4, 5, 6, 7]
+        );
+
+
+        // Encontra os reis
+        let reiPreto = encontrarRei("preto");
+        let reiBranco = encontrarRei("branco");
+
+
+        // Verifica se algum começa em xeque
+        let chequePreto = verificarCheque(
+            tabuleiro,
+            reiPreto[0],
+            reiPreto[1]
+        );
+
+        let chequeBranco = verificarCheque(
+            tabuleiro,
+            reiBranco[0],
+            reiBranco[1]
+        );
+
+
+        // Só aceita se nenhum estiver em xeque
+        if (!chequePreto && !chequeBranco) {
+            valido = true;
+        }
+    }
+}
     return tabuleiro
 }
 const modo_btn = document.getElementById("modo-interface");
