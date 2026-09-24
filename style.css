@@ -49,7 +49,175 @@ body {
     
     transition: 0.25s;
 }
+#telaMate {
+    position: fixed;
 
+    width: 300px;
+    min-height: 120px;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background:
+        radial-gradient(
+        circle at center,
+        rgb(0, 255, 34) 0%,
+        rgb(0, 180, 25) 25%,
+        rgb(1, 80, 12) 55%,
+        rgba(1, 37, 7, 1) 100%
+    );
+
+    border: 3px solid #033605;
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 15px rgba(0, 255, 0, 0.911),
+        0 0 40px rgba(2, 110, 17, 0.45),
+        inset 0 0 30px rgba(0, 87, 14, 0.15);
+
+    z-index: 9999;
+
+    overflow: hidden;
+
+    animation: aparecerMate 0.35s ease-out;
+}
+
+#telaMate::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 50%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.12),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    animation: brilhoMate 2.5s infinite;
+}
+
+#telaMate h2 {
+    margin: 10;
+
+    color: rgb(255, 255, 255);
+
+    font-family:
+        'Franklin Gothic Medium',
+        'Arial Narrow',
+        Arial,
+        sans-serif;
+
+    font-size: 42px;
+    letter-spacing: 5px;
+
+    text-shadow:
+        0 0 5px #f80101,
+        0 0 15px #ff0000,
+        0 0 30px rgba(236, 234, 234, 0.8);
+
+    animation: pulsarMate 1.5s infinite alternate;
+}
+
+#telaMate p {
+    margin: 12px 0 20px;
+
+    color: #ddd;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#telaMate button {
+    padding: 11px 50px;
+
+    border: 2px solid #054d03;
+    border-radius: 8px;
+
+    background: #160000;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+#telaMate button:hover {
+    background: #ff2020;
+
+    color: white;
+
+    transform: scale(1.08);
+
+    box-shadow:
+        0 0 10px #ff2020,
+        0 0 25px rgba(255, 0, 0, 0.7);
+}
+
+#telaMate button:active {
+    transform: scale(0.95);
+}
+
+
+@keyframes aparecerMate {
+
+    from {
+        opacity: 0;
+        transform: scale(0.75);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulsarMate {
+
+    from {
+        text-shadow:
+            0 0 5px #ff0000,
+            0 0 15px #ff0000;
+    }
+
+    to {
+        text-shadow:
+            0 0 10px #ff0000,
+            0 0 25px #ff0000,
+            0 0 45px #ff0000;
+    }
+}
+
+@keyframes brilhoMate {
+
+    0% {
+        left: -100%;
+    }
+
+    45% {
+        left: 150%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
 #tempo-personalizado:focus {
     border-color: #00ff88;
     box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
@@ -59,20 +227,19 @@ body {
     border-color: #888;
 }
 .timer#timer-branco {
-    background-color: #ffffff; /* Mesmo tom escuro translúcido da sua interface */
+    background-color: #ffffff;
     color: #000000;
     border-radius: 4px;
 }
 .timer#timer-preto {
-    background-color: #000000; /* Mesmo tom escuro translúcido da sua interface */
+    background-color: #000000; 
     color: #ffffff;
 }
 
 .timer#timer-branco.rainbow {
-    border: 3px solid transparent; /* Largura ajustada para destacar a borda arco-íris */
+    border: 3px solid transparent;
     border-radius: 4px;
 
-    /* A primeira linha define o fundo interno como BRANCO (#ffffff) */
     background-image: 
         linear-gradient(#ffffff, #ffffff), 
         linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
@@ -81,7 +248,6 @@ body {
     background-clip: padding-box, border-box;
     background-size: 200% 100%;
     
-    /* Altera a cor do texto para escuro para garantir contraste no fundo branco */
     color: #181717; 
     
     animation: moverRainbow 3s linear infinite;

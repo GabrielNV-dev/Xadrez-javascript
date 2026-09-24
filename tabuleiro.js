@@ -224,12 +224,13 @@ botoesModo.forEach(botao => {
         turno = "branco";
         clique1 = null;
         definirTempo()
-
+        mate = 0
         modoAtual = botao.id;
         tabuleiro = tabuleiroBack(modoAtual)
         visualizar()
     });
 });
+
 
 const alvo = document.getElementById("tabuleiro")
 
@@ -398,12 +399,106 @@ function obrigarCheckResolution(tabuleiro, linha_A, coluna_A, linha_D, coluna_D,
     return true
 }
 
+function verificarXequeMate(tabuleiro, cor) {
+
+    let reiL = -1;
+    let reiC = -1;
+
+    // Procura o rei dessa cor
+    for (let l = 0; l < 8; l++) {
+        for (let c = 0; c < 8; c++) {
+
+            const peca = tabuleiro[l][c];
+
+            if (peca &&
+                peca.tipo === "rei" &&
+                peca.cor === cor) {
+
+                reiL = l;
+                reiC = c;
+            }
+        }
+    }
+
+    // Não encontrou o rei
+    if (reiL === -1) {
+        return false;
+    }
+
+    // O rei não está em xeque
+    if (!verificarCheque(tabuleiro, reiL, reiC)) {
+        return false;
+    }
+
+    // Procura alguma peça dessa cor que consiga salvar o rei
+    for (let l = 0; l < 8; l++) {
+        for (let c = 0; c < 8; c++) {
+
+            const peca = tabuleiro[l][c];
+
+            if (!peca || peca.cor !== cor) {
+                continue;
+            }
+
+            for (let dl = 0; dl < 8; dl++) {
+                for (let dc = 0; dc < 8; dc++) {
+
+                    if (l === dl && c === dc) {
+                        continue;
+                    }
+
+                    const copia = structuredClone(tabuleiro);
+
+                    // Validade do movimento
+                    if (!gerenciador(copia, l, c, dl, dc)) {
+                        continue;
+                    }
+
+                    // Faz o movimento
+                    copia[dl][dc] = copia[l][c];
+                    copia[l][c] = null;
+
+                    // Se o rei foi movido, atualiza posição
+                    let reiTesteL = reiL;
+                    let reiTesteC = reiC;
+
+                    if (peca.tipo === "rei") {
+                        reiTesteL = dl;
+                        reiTesteC = dc;
+                    }
+
+                    // O movimento tirou o rei do xeque?
+                    if (!verificarCheque(copia, reiTesteL, reiTesteC)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    // Está em xeque e não encontrou nenhuma defesa
+    return true;
+}
+
 var event_promo = 0;
 const painel_promocao = document.getElementById("promocao")
+var mate = 0;
+
+
+document.getElementById("jogar-mate").addEventListener("click", () => {
+        document.getElementById("telaMate").style.display = "none"
+        turno = "branco";
+        clique1 = null;
+        definirTempo()
+        mate = 0;
+        tabuleiro = tabuleiroBack(modoAtual)
+        visualizar()
+    });
 
 function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
-
-
+    if (mate == 1){
+        return false
+    }
 
     const valido = gerenciador(tabuleiro, linha_A, coluna_A, linha_D, coluna_D)
 
@@ -467,6 +562,16 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
                 turno === "preto" ? turno = "branco" : turno = "preto";
                 event_promo = 0
                 painel_promocao.style.display = "none"
+                let corQueJogou = tabuleiro[linha_D][coluna_D].cor;
+
+                let corInimiga = corQueJogou === "branco"
+                    ? "preto"
+                    : "branco";
+
+                if (verificarXequeMate(tabuleiro, corInimiga)) {
+                    document.getElementById("telaMate").style.display = "flex"
+                    mate = 1;
+                }
                 visualizar();
 
             }
@@ -500,9 +605,19 @@ function Mover(tabuleiro, linha_A, coluna_A, linha_D, coluna_D) {
             iniciarTimer(turno == "branco" ? "preto" : "branco");
             turno === "preto" ? turno = "branco" : turno = "preto";
 
+            let corQueJogou = tabuleiro[linha_D][coluna_D].cor;
+
+            let corInimiga = corQueJogou === "branco"
+                ? "preto"
+                : "branco";
+
+            if (verificarXequeMate(tabuleiro, corInimiga)) {
+                mate = 1;
+                document.getElementById("telaMate").style.display = "flex"
+            }
         }
 
-
+        
     }
     visualizar();
 }
