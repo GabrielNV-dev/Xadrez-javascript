@@ -1,0 +1,157 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="lobby">
+
+        <button class="button-configs-lobby" id="criar">criar partida</button>
+
+        <button class="button-configs-lobby" id="entrar">Encontrar partida</button>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+            import {
+                getFirestore,
+                doc,
+                setDoc
+            } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyAWsdNWsTgefsADp9iSwp9A3s2OacW-kto",
+                authDomain: "bomb-text-9bbf6.firebaseapp.com",
+                projectId: "bomb-text-9bbf6",
+                storageBucket: "bomb-text-9bbf6.firebasestorage.app",
+                messagingSenderId: "364564655193",
+                appId: "1:364564655193:web:9df8d93591bf9629371548"
+            };
+
+
+            // Inicializa Firebase
+            const app = initializeApp(firebaseConfig);
+
+            // Inicializa Firestore
+            const db = getFirestore(app);
+
+
+            async function testarFirestore() {
+
+                try {
+
+                    const usuarioRef = doc(db, "lobby", "partidas");
+
+                    await setDoc(usuarioRef, {
+                        nome: "Joeqão"
+                    }, {
+                        merge: true
+                    });
+
+                    console.log("Campo atualizado!");
+
+                } catch (error) {
+
+                    console.error("Erro ao atualizar Firestore:", error);
+
+                }
+
+            }
+            testarFirestore()
+            async function criar() {
+                const peer = new RTCPeerConnection({
+                    iceServers: [
+                        {
+                            urls: "stun:stun.l.google.com:19302"
+                        }
+                    ]
+                });
+
+                const offer = await peer.createOffer();
+
+                await peer.setLocalDescription(offer);
+
+                console.log(JSON.stringify(offer));
+
+                const channel = peer.createDataChannel("chess");
+
+                channel.onopen = () => {
+                    console.log("Conectado ao adversário!");
+                };
+
+                channel.onmessage = (event) => {
+                    const message = JSON.parse(event.data);
+
+                    console.log("Recebi:", message);
+                };
+
+                function enviarJogada(from, to) {
+                    channel.send(JSON.stringify({
+                        type: "move",
+                        from,
+                        to,
+                        promotion: null
+                    }));
+                }
+            }
+            async function entrar(offerJSON) {
+                const peer = new RTCPeerConnection({
+                    iceServers: [
+                        {
+                            urls: "stun:stun.l.google.com:19302"
+                        }
+                    ]
+                });
+
+                // O jogador B não cria o DataChannel.
+                // Ele recebe o canal criado pelo jogador A.
+                peer.ondatachannel = (event) => {
+
+                    const channel = event.channel;
+
+                    channel.onopen = () => {
+                        console.log("🟢 Conectado ao jogador A!");
+                    };
+
+                    channel.onmessage = (event) => {
+
+                        const message = JSON.parse(event.data);
+
+                        console.log("Recebi:", message);
+
+                    };
+                };
+
+                // Recebe o OFFER do jogador A
+                const offer = JSON.parse(offerJSON);
+
+                await peer.setRemoteDescription(offer);
+
+                // Cria a resposta
+                const answer = await peer.createAnswer();
+
+                await peer.setLocalDescription(answer);
+
+                // Esse JSON precisa voltar para o jogador A
+                console.log("ANSWER:");
+                console.log(JSON.stringify(peer.localDescription));
+
+                return peer;
+            }
+
+
+            document.getElementById("criar").addEventListener("click", criar);
+
+        </script>
+
+
+    </div>
+</body>
+
+</html>

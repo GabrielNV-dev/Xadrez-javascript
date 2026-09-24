@@ -1,54 +1,89 @@
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;
-  background-color: rgb(2, 39, 1);
-  filter: brightness(1.1)  contrast(1.1);
-  background: radial-gradient(circle,rgba(1, 37, 7, 1) 0%, rgb(1, 102, 14) 5%, rgb(1, 37, 7) 50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: rgb(2, 39, 1);
+    filter: brightness(1.1) contrast(1.1);
+    background: radial-gradient(circle, rgba(1, 37, 7, 1) 0%, rgb(1, 102, 14) 5%, rgb(1, 37, 7) 50%);
 
 }
-#game{
+
+#lobby {
+    height: 600px;
+    width: 500px;
+    background-color: #fdcc7c;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 5px solid rgb(61, 61, 61);
+}
+.button-configs-lobby {
+    background-color: #7c7c7c;
+    width: 200px;
+    height: 50px;
+    margin: 1;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    font-size: 15px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    cursor: pointer;
+
+}
+.button-configs-lobby:active {
+    transform: translateY(5px);
+}
+
+#game {
     display: flex;
     margin-left: 18px;
     justify-content: center;
     align-items: center;
 }
+
 .timer {
     font-size: 20px;
     font-weight: bold;
-    width: 100px; /* Mesma largura exata do seu tabuleiro (8 colunas * 80px = 640px) */
+    width: 100px;
+    /* Mesma largura exata do seu tabuleiro (8 colunas * 80px = 640px) */
     height: 40px;
     display: none;
     justify-content: center;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-    border: 3px solid rgb(61, 61, 61); /* Mesma borda cinza do seu tabuleiro */
+    border: 3px solid rgb(61, 61, 61);
+    /* Mesma borda cinza do seu tabuleiro */
     border-radius: 4px;
     margin-left: 550px;
-    
+
 }
+
 #tempo-personalizado {
     width: 120px;
     padding: 10px 14px;
-    
+
     background: #1e1e1e;
     color: white;
     display: none;
     border: 2px solid #555;
     border-radius: 10px;
-    
+
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    
+
     outline: none;
-    
+
     transition: 0.25s;
 }
+
 #telaMate {
     position: fixed;
 
@@ -61,13 +96,11 @@ body {
     flex-direction: column;
 
     background:
-        radial-gradient(
-        circle at center,
-        rgb(0, 255, 34) 0%,
-        rgb(0, 180, 25) 25%,
-        rgb(1, 80, 12) 55%,
-        rgba(1, 37, 7, 1) 100%
-    );
+        radial-gradient(circle at center,
+            rgb(0, 255, 34) 0%,
+            rgb(0, 180, 25) 25%,
+            rgb(1, 80, 12) 55%,
+            rgba(1, 37, 7, 1) 100%);
 
     border: 3px solid #033605;
     border-radius: 18px;
@@ -95,12 +128,10 @@ body {
     width: 50%;
     height: 100%;
 
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.12),
-        transparent
-    );
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.12),
+            transparent);
 
     transform: skewX(-20deg);
 
@@ -218,6 +249,7 @@ body {
         left: 150%;
     }
 }
+
 #tempo-personalizado:focus {
     border-color: #00ff88;
     box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
@@ -226,13 +258,15 @@ body {
 #tempo-personalizado:hover {
     border-color: #888;
 }
+
 .timer#timer-branco {
     background-color: #ffffff;
     color: #000000;
     border-radius: 4px;
 }
+
 .timer#timer-preto {
-    background-color: #000000; 
+    background-color: #000000;
     color: #ffffff;
 }
 
@@ -240,16 +274,16 @@ body {
     border: 3px solid transparent;
     border-radius: 4px;
 
-    background-image: 
-        linear-gradient(#ffffff, #ffffff), 
+    background-image:
+        linear-gradient(#ffffff, #ffffff),
         linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
-    
+
     background-origin: border-box;
     background-clip: padding-box, border-box;
     background-size: 200% 100%;
-    
-    color: #181717; 
-    
+
+    color: #181717;
+
     animation: moverRainbow 3s linear infinite;
 }
 
@@ -257,44 +291,49 @@ body {
     0% {
         background-position: 0% 0%;
     }
+
     100% {
-        background-position: 200% 0%; /* Alinhado para animar o movimento continuo */
+        background-position: 200% 0%;
+        /* Alinhado para animar o movimento continuo */
     }
 }
-.timer#timer-preto.rainbow,
-#tabuleiro.rainbow{
-    border: 4px solid transparent;
-    border-radius: 8px; /* Funciona melhor com esta técnica */
 
-    background-image: 
-    linear-gradient(#121212, #121212), 
-    linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
+.timer#timer-preto.rainbow,
+#tabuleiro.rainbow {
+    border: 4px solid transparent;
+    border-radius: 8px;
+    /* Funciona melhor com esta técnica */
+
+    background-image:
+        linear-gradient(#121212, #121212),
+        linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
     background-origin: border-box;
     background-clip: padding-box, border-box;
 
     background-size: 200% 100%;
     animation: moverRainbow 3s linear infinite;
+}
+
+@keyframes moverRainbow {
+    0% {
+        background-position: 0% 0%;
     }
 
-    @keyframes moverRainbow {
-    0% {
-    background-position: 0% 0%;
-    }
     100% {
-    background-position: 200% 0%;
+        background-position: 200% 0%;
     }
 }
 
-#tabuleiro{
+#tabuleiro {
     background-color: rgb(0, 0, 0);
     display: grid;
-    grid-template-columns: repeat(8,80px);
+    grid-template-columns: repeat(8, 80px);
     grid-template-rows: repeat(8, 80px);
     border: 5px solid rgb(61, 61, 61);
 }
 
-.CasaBranca{
-  background-color: #f0d9b5;
+.CasaBranca {
+    background-color: #f0d9b5;
     width: 80px;
     height: 80px;
 
@@ -331,7 +370,7 @@ body {
     z-index: 0;
 }
 
-.CasaPreta.check > * {
+.CasaPreta.check>* {
     position: relative;
     z-index: 1;
 }
@@ -361,12 +400,13 @@ body {
     z-index: 0;
 }
 
-.CasaBranca.check > * {
+.CasaBranca.check>* {
     position: relative;
     z-index: 1;
 }
+
 .CasaPreta {
-    background-color:#b58863;
+    background-color: #b58863;
     width: 80px;
     height: 80px;
 
@@ -388,38 +428,106 @@ body {
     background-position: center;
 }
 
-.peca.peao.branco.default {background-image: url(Imagens/Peao_branco_default.png);}
-.peca.torre.branco.default { background-image: url(Imagens/Torre_branco_default.png);}
-.peca.cavalo.branco.default { background-image: url(Imagens/Cavalo_branco_default.png);}
-.peca.bispo.branco.default { background-image: url(Imagens/Bispo_branco_default.png);}
-.peca.dama.branco.default { background-image: url(Imagens/Dama_branco_default.png);}
-.peca.rei.branco.default { background-image: url(Imagens/Rei_branco_default.png);}
+.peca.peao.branco.default {
+    background-image: url(Imagens/Peao_branco_default.png);
+}
 
-.peca.peao.preto.default { background-image: url(Imagens/Peao_preto_default.png);}
-.peca.torre.preto.default { background-image: url(Imagens/Torre_preto_default.png);}
-.peca.cavalo.preto.default { background-image: url(Imagens/Cavalo_preto_default.png);}
-.peca.bispo.preto.default { background-image: url(Imagens/Bispo_preto_default.png);}
-.peca.dama.preto.default { background-image: url(Imagens/Dama_preto_default.png);}
-.peca.rei.preto.default { background-image: url(Imagens/Rei_preto_default.png);}
+.peca.torre.branco.default {
+    background-image: url(Imagens/Torre_branco_default.png);
+}
 
-.peca.peao.branco.pixelart {background-image: url(Imagens/Peao_branco_pixelart.png);}
-.peca.torre.branco.pixelart { background-image: url(Imagens/Torre_branco_pixelart.png);}
-.peca.cavalo.branco.pixelart { background-image: url(Imagens/Cavalo_branco_pixelart.png);}
-.peca.bispo.branco.pixelart { background-image: url(Imagens/Bispo_branco_pixelart.png);}
-.peca.dama.branco.pixelart { background-image: url(Imagens/Dama_branco_pixelart.png);}
-.peca.rei.branco.pixelart { background-image: url(Imagens/Rei_branco_pixelart.png);}
+.peca.cavalo.branco.default {
+    background-image: url(Imagens/Cavalo_branco_default.png);
+}
 
-.peca.peao.preto.pixelart { background-image: url(Imagens/Peao_preto_pixelart.png);}
-.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
-.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
-.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
-.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
-.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
+.peca.bispo.branco.default {
+    background-image: url(Imagens/Bispo_branco_default.png);
+}
 
-.promove{
+.peca.dama.branco.default {
+    background-image: url(Imagens/Dama_branco_default.png);
+}
+
+.peca.rei.branco.default {
+    background-image: url(Imagens/Rei_branco_default.png);
+}
+
+.peca.peao.preto.default {
+    background-image: url(Imagens/Peao_preto_default.png);
+}
+
+.peca.torre.preto.default {
+    background-image: url(Imagens/Torre_preto_default.png);
+}
+
+.peca.cavalo.preto.default {
+    background-image: url(Imagens/Cavalo_preto_default.png);
+}
+
+.peca.bispo.preto.default {
+    background-image: url(Imagens/Bispo_preto_default.png);
+}
+
+.peca.dama.preto.default {
+    background-image: url(Imagens/Dama_preto_default.png);
+}
+
+.peca.rei.preto.default {
+    background-image: url(Imagens/Rei_preto_default.png);
+}
+
+.peca.peao.branco.pixelart {
+    background-image: url(Imagens/Peao_branco_pixelart.png);
+}
+
+.peca.torre.branco.pixelart {
+    background-image: url(Imagens/Torre_branco_pixelart.png);
+}
+
+.peca.cavalo.branco.pixelart {
+    background-image: url(Imagens/Cavalo_branco_pixelart.png);
+}
+
+.peca.bispo.branco.pixelart {
+    background-image: url(Imagens/Bispo_branco_pixelart.png);
+}
+
+.peca.dama.branco.pixelart {
+    background-image: url(Imagens/Dama_branco_pixelart.png);
+}
+
+.peca.rei.branco.pixelart {
+    background-image: url(Imagens/Rei_branco_pixelart.png);
+}
+
+.peca.peao.preto.pixelart {
+    background-image: url(Imagens/Peao_preto_pixelart.png);
+}
+
+.peca.torre.preto.pixelart {
+    background-image: url(Imagens/Torre_preto_pixelart.png);
+}
+
+.peca.cavalo.preto.pixelart {
+    background-image: url(Imagens/Cavalo_preto_pixelart.png);
+}
+
+.peca.bispo.preto.pixelart {
+    background-image: url(Imagens/Bispo_preto_pixelart.png);
+}
+
+.peca.dama.preto.pixelart {
+    background-image: url(Imagens/Dama_preto_pixelart.png);
+}
+
+.peca.rei.preto.pixelart {
+    background-image: url(Imagens/Rei_preto_pixelart.png);
+}
+
+.promove {
     padding: 25px;
     margin: 0px;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -429,30 +537,53 @@ body {
     background-repeat: no-repeat;
     background-position: center;
 }
-.promove { background-image: url(Imagens/Peao_preto_default.png);}
-.peca.torre.preto.pixelart { background-image: url(Imagens/Torre_preto_pixelart.png);}
-.peca.cavalo.preto.pixelart { background-image: url(Imagens/Cavalo_preto_pixelart.png);}
-.peca.bispo.preto.pixelart { background-image: url(Imagens/Bispo_preto_pixelart.png);}
-.peca.dama.preto.pixelart { background-image: url(Imagens/Dama_preto_pixelart.png);}
-.peca.rei.preto.pixelart { background-image: url(Imagens/Rei_preto_pixelart.png);}
+
+.promove {
+    background-image: url(Imagens/Peao_preto_default.png);
+}
+
+.peca.torre.preto.pixelart {
+    background-image: url(Imagens/Torre_preto_pixelart.png);
+}
+
+.peca.cavalo.preto.pixelart {
+    background-image: url(Imagens/Cavalo_preto_pixelart.png);
+}
+
+.peca.bispo.preto.pixelart {
+    background-image: url(Imagens/Bispo_preto_pixelart.png);
+}
+
+.peca.dama.preto.pixelart {
+    background-image: url(Imagens/Dama_preto_pixelart.png);
+}
+
+.peca.rei.preto.pixelart {
+    background-image: url(Imagens/Rei_preto_pixelart.png);
+}
 
 .peca.pixelart {
     background-size: 60%;
 }
+
 .peca:hover {
     filter: brightness(1.2) drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
 }
+
 .CasaBranca.selecionada,
 .CasaPreta.selecionada {
-    background-color:rgb(54, 44, 30);
-    
+    background-color: rgb(54, 44, 30);
+
 }
+
 .peca.selecionada {
-    transform: scale(1.1); /* Aumenta um pouco */
+    transform: scale(1.1);
+    /* Aumenta um pouco */
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
     z-index: 10;
 }
-#button-interface{
+
+#button-interface {
     background-color: #f0d9b5d5;
     width: 8px;
     height: 80px;
@@ -460,13 +591,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     font-size: 20px;
     cursor: pointer;
 }
+
 #button-interface:active {
     transform: translateY(5px);
 }
+
 #interface {
     background-color: #18171796;
     width: 200px;
@@ -478,6 +611,7 @@ body {
     align-content: center;
     gap: 10px;
 }
+
 #modos {
     background-color: #18171796;
     width: 650px;
@@ -489,6 +623,7 @@ body {
     align-content: center;
 
 }
+
 .button-configs-modos {
     background-color: #7c7c7c;
     width: 60px;
@@ -500,14 +635,16 @@ body {
     align-items: center;
 
     font-size: 15px;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     cursor: pointer;
 
 }
+
 .button-configs-modos:active {
     transform: translateY(5px);
 }
-#promocao{
+
+#promocao {
     background-color: #18171796;
     width: 200px;
     height: 650px;
@@ -518,6 +655,7 @@ body {
     align-content: center;
     gap: 50px;
 }
+
 .button-configs-interface {
     background-color: #fdf583b4;
     width: 80px;
@@ -529,9 +667,10 @@ body {
     align-items: center;
 
     font-size: 15px;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     cursor: pointer;
 }
+
 .button-configs-interface:active {
     transform: translateY(5px);
 }
