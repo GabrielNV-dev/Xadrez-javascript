@@ -1,185 +1,437 @@
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lobby</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
     <div id="lobby">
 
-        <button class="button-configs-lobby" id="criaPedido">criar partida</button>
+        <button class="button-configs-lobby" id="abrirmodo">
+            criar partida
+        </button>
 
-        <button class="button-configs-lobby" id="entrar">Encontrar partida</button>
+        <button class="button-configs-lobby" id="entrar">
+            Encontrar partida
+        </button>
+
+    </div>
 
 
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-            import {
-                getFirestore,
-                doc,
-                setDoc
-            } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-            const firebaseConfig = {
-                apiKey: "AIzaSyAWsdNWsTgefsADp9iSwp9A3s2OacW-kto",
-                authDomain: "bomb-text-9bbf6.firebaseapp.com",
-                projectId: "bomb-text-9bbf6",
-                storageBucket: "bomb-text-9bbf6.firebasestorage.app",
-                messagingSenderId: "364564655193",
-                appId: "1:364564655193:web:9df8d93591bf9629371548"
-            };
+    <div id="modos">
 
-            // Inicializa Firebase
-            const app = initializeApp(firebaseConfig);
-            // Inicializa Firestore
-            const db = getFirestore(app);
+        <button class="button-configs-modos" id="modo-default">
+            Normal
+        </button>
 
-            async function criar() {
-                const peer = new RTCPeerConnection({
-                    iceServers: [
-                        {
-                            urls: "stun:stun.l.google.com:19302"
-                        }
-                    ]
-                });
+        <button class="button-configs-modos" id="modo-960">
+            960
+        </button>
 
-                const offer = await peer.createOffer();
+        <button class="button-configs-modos" id="modo-rei">
+            rei contente
+        </button>
 
-                await peer.setLocalDescription(offer);
-                var pedido = JSON.stringify(offer)
-                console.log(pedido);
+        <button class="button-configs-modos" id="modo-maluco">
+            lugar maluco
+        </button>
 
-                const channel = peer.createDataChannel("chess");
+    </div>
 
-                channel.onopen = () => {
-                    console.log("Conectado ao adversário!");
-                };
 
-                channel.onmessage = (event) => {
-                    const message = JSON.parse(event.data);
+    <div id="carregando">
 
-                    console.log("Recebi:", message);
-                };
+        <div class="spinner"></div>
 
-                function enviarJogada(from, to) {
-                    channel.send(JSON.stringify({
-                        type: "move",
-                        from,
-                        to,
-                        promotion: null
-                    }));
-                }
-                return pedido
+        <p>Esperando outro jogador...</p>
+
+    </div>
+
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            onSnapshot
+        } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+
+        // =========================
+        // FIREBASE
+        // =========================
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyAWsdNWsTgefsADp9iSwp9A3s2OacW-kto",
+
+            authDomain: "bomb-text-9bbf6.firebaseapp.com",
+
+            projectId: "bomb-text-9bbf6",
+
+            storageBucket: "bomb-text-9bbf6.firebasestorage.app",
+
+            messagingSenderId: "364564655193",
+
+            appId: "1:364564655193:web:9df8d93591bf9629371548"
+
+        };
+
+
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+
+        // =========================
+        // VARIÁVEIS
+        // =========================
+
+        let number = 1;
+
+        let player = false;
+
+        // ID da requisição criada por este jogador
+        let minhaRequisicao = null;
+
+
+        // =========================
+        // VERIFICAR PARTIDA
+        // =========================
+
+        function verificarPartida() {
+
+            if (player) {
+
+                console.log("Outro jogador encontrado!");
+
+                // Carrega o outro HTML
+                window.location.href = "index.html";
             }
 
-            async function criaPedido() {
+        }
 
-                try {
 
-                    let pedido = await criar()
-                    const usuarioRef = doc(db, "lobby", "partidas");
+        // =========================
+        // OBSERVAR LOBBY
+        // =========================
 
-                    await setDoc(usuarioRef, {
-                        [`requisicao${Math.random().toString(36).substring(2, 8)}`]: {
-                            "tipo": "criado",
-                            "json": pedido,
-                            "modo": "default"
-                        }
-                    }, {
-                        merge: true
-                    });
+        const lobbyRef = doc(db, "lobby", "partidas");
 
-                    console.log("Campo atualizado!");
 
-                } catch (error) {
+        onSnapshot(lobbyRef, (snapshot) => {
 
-                    console.error("Erro ao atualizar Firestore:", error);
+            if (!snapshot.exists()) {
+                return;
+            }
 
-                }
+
+            const dados = snapshot.data();
+
+            console.log("Lobby atualizado:", dados);
+
+
+            // Pega todas as requisições existentes
+            const requisicoes = Object.keys(dados);
+
+
+            console.log("Requisições:", requisicoes);
+
+
+            // Procura uma requisição que não seja a nossa
+            const outroJogador = requisicoes.find(
+                id => id !== minhaRequisicao
+            );
+
+
+            if (outroJogador) {
+
+                console.log(
+                    "Outro jogador encontrado:",
+                    outroJogador
+                );
+
+
+                player = true;
+
+                verificarPartida();
 
             }
 
-            async function entrar(offerJSON) {
-                const peer = new RTCPeerConnection({
-                    iceServers: [
-                        {
-                            urls: "stun:stun.l.google.com:19302"
-                        }
-                    ]
-                });
+        });
 
-                // O jogador B não cria o DataChannel.
-                // Ele recebe o canal criado pelo jogador A.
-                peer.ondatachannel = (event) => {
 
-                    const channel = event.channel;
+        // =========================
+        // CRIAR WEBRTC
+        // =========================
 
-                    channel.onopen = () => {
-                        console.log("🟢 Conectado ao jogador A!");
-                    };
+        async function criar() {
 
-                    channel.onmessage = (event) => {
-
-                        const message = JSON.parse(event.data);
-
-                        console.log("Recebi:", message);
-
-                    };
-                };
-
-                // Recebe o OFFER do jogador A
-                const offer = JSON.parse(offerJSON);
-
-                await peer.setRemoteDescription(offer);
-
-                // Cria a resposta
-                const answer = await peer.createAnswer();
-
-                await peer.setLocalDescription(answer);
-
-                // Esse JSON precisa voltar para o jogador A
-                console.log("ANSWER:");
-                console.log(JSON.stringify(peer.localDescription));
-
-                return peer;
-            }
-
-            var number = 1
-            function abrirmodos() {
-                console.log(number)
-                if (number == 1) {
-                    document.getElementById("modos").style.display = "flex"
-                    number = number - 1
-                } else {
-                    document.getElementById("modos").style.display = "none"
-                    number = number + 1
-                }
-            }
-
-            const botoesModo = document.querySelectorAll(".button-configs-modos");
-            botoesModo.forEach(botao => {
-                botao.addEventListener("click", () => {
-                    turno = "branco";
-                    modoAtual = botao.id;
-                    visualizar()
-                });
+            const peer = new RTCPeerConnection({
+                iceServers: [
+                    {
+                        urls: "stun:stun.l.google.com:19302"
+                    }
+                ]
             });
 
+            const channel = peer.createDataChannel("chess");
 
-            document.getElementById("criaPedido").addEventListener("click", abrirmodos);
+            channel.onopen = () => {
+                console.log("Conectado ao adversário!");
 
-        </script>
+                // Guarda que somos o jogador A
+                sessionStorage.setItem("jogador", "A");
+            };
+
+            channel.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+
+                console.log("Recebi:", message);
+            };
+
+            const offer = await peer.createOffer();
+
+            await peer.setLocalDescription(offer);
+
+            const pedido = JSON.stringify(peer.localDescription);
+
+            // SALVA NO SESSION STORAGE
+            sessionStorage.setItem("webrtc_offer", pedido);
+
+            console.log("OFFER:");
+            console.log(pedido);
+
+            return pedido;
+        }
+        // =========================
+        // CRIAR PEDIDO
+        // =========================
+        async function criarPedido(turno, modo) {
+
+            try {
+
+                const pedido = await criar();
+
+                minhaRequisicao =
+                    "requisicao_" +
+                    Math.random()
+                        .toString(36)
+                        .substring(2, 8);
+
+                sessionStorage.setItem(
+                    "requisicao",
+                    minhaRequisicao
+                );
+
+                sessionStorage.setItem(
+                    "turno",
+                    turno
+                );
+
+                sessionStorage.setItem(
+                    "modo",
+                    modo
+                );
+
+                const usuarioRef =
+                    doc(db, "lobby", "partidas");
+
+                await setDoc(
+                    usuarioRef,
+                    {
+                        [minhaRequisicao]: {
+                            turno: turno,
+                            json: pedido,
+                            modo: modo
+                        }
+                    },
+                    {
+                        merge: true
+                    }
+                );
+
+                // ...
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao atualizar Firestore:",
+                    error
+                );
+
+            }
+        }
+        // =========================
+        // ENTRAR EM UMA PARTIDA
+        // =========================
+
+        async function entrar(offerJSON) {
+
+            const peer =
+                new RTCPeerConnection({
+
+                    iceServers: [
+
+                        {
+                            urls:
+                                "stun:stun.l.google.com:19302"
+                        }
+
+                    ]
+
+                });
 
 
-    </div>
-    <div id="modos">
-        <button class="button-configs-modos" id="modo-default">Normal</button>
-        <button class="button-configs-modos" id="modo-960">960</button>
-        <button class="button-configs-modos" id="modo-rei">rei contente</button>
-        <button class="button-configs-modos" id="modo-maluco">lugar maluco</button>
-    </div>
+            peer.ondatachannel = (event) => {
+
+                const channel = event.channel;
+
+
+                channel.onopen = () => {
+
+                    console.log(
+                        "🟢 Conectado ao jogador A!"
+                    );
+
+                };
+
+
+                channel.onmessage = (event) => {
+
+                    const message =
+                        JSON.parse(event.data);
+
+                    console.log(
+                        "Recebi:",
+                        message
+                    );
+
+                };
+
+            };
+
+
+            const offer =
+                JSON.parse(offerJSON);
+
+
+            await peer.setRemoteDescription(
+                offer
+            );
+
+
+            const answer =
+                await peer.createAnswer();
+
+
+            await peer.setLocalDescription(
+                answer
+            );
+
+
+            console.log("ANSWER:");
+
+            console.log(
+                JSON.stringify(peer.localDescription)
+            );
+
+
+            return peer;
+
+        }
+
+
+        // =========================
+        // ABRIR MODOS
+        // =========================
+
+        function abrirmodos() {
+
+            console.log(number);
+
+
+            if (number == 1) {
+
+                document.getElementById("modos")
+                    .style.display = "flex";
+
+                number = number - 1;
+
+            }
+
+            else {
+
+                document.getElementById("modos")
+                    .style.display = "none";
+
+                number = number + 1;
+
+            }
+
+        }
+
+
+        // =========================
+        // BOTÕES DOS MODOS
+        // =========================
+
+        const botoesModo =
+            document.querySelectorAll(
+                ".button-configs-modos"
+            );
+
+
+        botoesModo.forEach(botao => {
+
+            botao.addEventListener(
+                "click",
+                () => {
+
+                    const turno =
+                        Math.floor(
+                            Math.random() * 3
+                        ) + 1 === 1
+                            ? "branco"
+                            : "preto";
+
+
+                    const modoAtual =
+                        botao.id;
+
+
+                    criarPedido(
+                        turno,
+                        modoAtual
+                    );
+
+                }
+            );
+
+        });
+
+
+        // =========================
+        // BOTÃO CRIAR PARTIDA
+        // =========================
+
+        document
+            .getElementById("abrirmodo")
+            .addEventListener(
+                "click",
+                abrirmodos
+            );
+
+    </script>
+
 </body>
 
 </html>
