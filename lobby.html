@@ -10,21 +10,18 @@
 <body>
     <div id="lobby">
 
-        <button class="button-configs-lobby" id="criar">criar partida</button>
+        <button class="button-configs-lobby" id="criaPedido">criar partida</button>
 
         <button class="button-configs-lobby" id="entrar">Encontrar partida</button>
 
+
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
             import {
                 getFirestore,
                 doc,
                 setDoc
             } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
-
-
             const firebaseConfig = {
                 apiKey: "AIzaSyAWsdNWsTgefsADp9iSwp9A3s2OacW-kto",
                 authDomain: "bomb-text-9bbf6.firebaseapp.com",
@@ -34,36 +31,11 @@
                 appId: "1:364564655193:web:9df8d93591bf9629371548"
             };
 
-
             // Inicializa Firebase
             const app = initializeApp(firebaseConfig);
-
             // Inicializa Firestore
             const db = getFirestore(app);
 
-
-            async function testarFirestore() {
-
-                try {
-
-                    const usuarioRef = doc(db, "lobby", "partidas");
-
-                    await setDoc(usuarioRef, {
-                        nome: "Joeqão"
-                    }, {
-                        merge: true
-                    });
-
-                    console.log("Campo atualizado!");
-
-                } catch (error) {
-
-                    console.error("Erro ao atualizar Firestore:", error);
-
-                }
-
-            }
-            testarFirestore()
             async function criar() {
                 const peer = new RTCPeerConnection({
                     iceServers: [
@@ -76,8 +48,8 @@
                 const offer = await peer.createOffer();
 
                 await peer.setLocalDescription(offer);
-
-                console.log(JSON.stringify(offer));
+                var pedido = JSON.stringify(offer)
+                console.log(pedido);
 
                 const channel = peer.createDataChannel("chess");
 
@@ -99,7 +71,36 @@
                         promotion: null
                     }));
                 }
+                return pedido
             }
+
+            async function criaPedido() {
+
+                try {
+
+                    let pedido = await criar()
+                    const usuarioRef = doc(db, "lobby", "partidas");
+
+                    await setDoc(usuarioRef, {
+                        [`requisicao${Math.random().toString(36).substring(2, 8)}`]: {
+                            "tipo": "criado",
+                            "json": pedido,
+                            "modo": "default"
+                        }
+                    }, {
+                        merge: true
+                    });
+
+                    console.log("Campo atualizado!");
+
+                } catch (error) {
+
+                    console.error("Erro ao atualizar Firestore:", error);
+
+                }
+
+            }
+
             async function entrar(offerJSON) {
                 const peer = new RTCPeerConnection({
                     iceServers: [
@@ -145,12 +146,39 @@
                 return peer;
             }
 
+            var number = 1
+            function abrirmodos() {
+                console.log(number)
+                if (number == 1) {
+                    document.getElementById("modos").style.display = "flex"
+                    number = number - 1
+                } else {
+                    document.getElementById("modos").style.display = "none"
+                    number = number + 1
+                }
+            }
 
-            document.getElementById("criar").addEventListener("click", criar);
+            const botoesModo = document.querySelectorAll(".button-configs-modos");
+            botoesModo.forEach(botao => {
+                botao.addEventListener("click", () => {
+                    turno = "branco";
+                    modoAtual = botao.id;
+                    visualizar()
+                });
+            });
+
+
+            document.getElementById("criaPedido").addEventListener("click", abrirmodos);
 
         </script>
 
 
+    </div>
+    <div id="modos">
+        <button class="button-configs-modos" id="modo-default">Normal</button>
+        <button class="button-configs-modos" id="modo-960">960</button>
+        <button class="button-configs-modos" id="modo-rei">rei contente</button>
+        <button class="button-configs-modos" id="modo-maluco">lugar maluco</button>
     </div>
 </body>
 
